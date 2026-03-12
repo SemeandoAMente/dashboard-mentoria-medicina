@@ -115,6 +115,99 @@ const WEEKS_DATA = [
   },
 ];
 
+// ==========================================
+// TÓPICOS POR MATÉRIA (baseado na HIERARQUIA.md)
+// Chave = valor de "topic" em WEEKS_DATA
+// ==========================================
+const TOPICOS_POR_MATERIA = {
+  // === BIOLOGIA ===
+  'Genética molecular I': ['DNA', 'RNA', 'gene', 'alelo', 'genótipo x fenótipo', 'replicação', 'transcrição', 'tradução'],
+  'Genética molecular II': ['código genético', 'biotecnologia', 'mutação', 'recombinação gênica', 'genética molecular avançada'],
+  'Mendelismo': ['conceitos básicos', 'mendelismo', 'neomendelismo', 'cruzamentos', 'probabilidade', 'genes e cromossomos', 'crossing over'],
+  'Célula I': ['procarionte e eucarionte', 'célula animal e vegetal', 'organelas', 'funções celulares'],
+  'Célula II': ['componentes químicos', 'núcleo', 'mitose', 'meiose'],
+  'Funções vitais I (dig./resp./circ./excr.)': ['digestão', 'respiração', 'circulação', 'excreção'],
+  'Funções vitais II (nerv./endócr./reprod.)': ['sistema nervoso', 'sistema endócrino', 'reprodução humana', 'gametogênese', 'fecundação', 'embriologia básica'],
+  'Ecologia': ['cadeias alimentares', 'ciclos biogeoquímicos', 'relações ecológicas', 'biomas', 'impacto ambiental', 'sucessão ecológica'],
+  'Evolução': ['teorias evolutivas', 'seleção natural', 'especiação', 'evidências da evolução', 'adaptação'],
+
+  // === QUÍMICA ===
+  'Estequiometria I': ['reação química', 'equação química', 'balanceamento', 'mol', 'massa molar'],
+  'Estequiometria II': ['leis ponderais', 'leis volumétricas', 'cálculo estequiométrico', 'reagente limitante'],
+  'Soluções': ['soluto', 'solvente', 'concentração', 'diluição', 'mistura de soluções'],
+  'Equilíbrio químico I': ['constante de equilíbrio', 'Le Chatelier', 'equilíbrio iônico'],
+  'Equilíbrio químico II': ['pH', 'pOH', 'solução tampão', 'produto de solubilidade'],
+  'Química orgânica I': ['carbono', 'cadeias carbônicas', 'funções orgânicas', 'nomenclatura'],
+  'Química orgânica II': ['isomeria', 'reações orgânicas', 'produtos naturais', 'petróleo'],
+  'Termoquímica / cinética': ['entalpia', 'lei de Hess', 'energia de ativação', 'fatores cinéticos', 'velocidade de reação'],
+  'Eletroquímica': ['pilhas', 'eletrólise', 'potencial de redução', 'equação de Nernst'],
+
+  // === FÍSICA ===
+  'Mecânica I': ['cinemática', 'vetores', 'força', 'leis de Newton'],
+  'Mecânica II': ['trabalho', 'energia', 'potência', 'gravitação', 'quantidade de movimento'],
+  'Termologia I': ['temperatura', 'escalas termométricas', 'dilatação', 'calorimetria'],
+  'Termologia II / Fluidos': ['mudanças de estado', 'calor latente', 'densidade', 'pressão', 'Stevin', 'Pascal', 'Arquimedes'],
+  'Ondulatória I': ['ondas', 'frequência', 'comprimento de onda', 'reflexão', 'refração', 'superposição', 'difração'],
+  'Óptica': ['espelhos', 'lentes', 'instrumentos ópticos', 'reflexão da luz', 'refração da luz'],
+  'Eletricidade I': ['carga elétrica', 'campo elétrico', 'potencial elétrico', 'corrente elétrica', 'resistência'],
+  'Eletricidade II': ['circuitos elétricos', 'potência elétrica', 'associação de resistores', 'capacitores'],
+  'Magnetismo + revisão': ['campo magnético', 'força magnética', 'indução eletromagnética', 'revisão integrada'],
+
+  // === MATEMÁTICA ===
+  'Funções I': ['conjuntos', 'conjuntos numéricos', 'função do 1º grau', 'função do 2º grau'],
+  'Funções II': ['função modular', 'função exponencial', 'função logarítmica', 'gráficos'],
+  'Álgebra e equações': ['equações', 'inequações', 'sistemas', 'álgebra fundamental'],
+  'Probabilidade e combinatória': ['análise combinatória', 'probabilidade', 'arranjo', 'permutação', 'combinação'],
+  'Sequências + revisão prática prob./comb.': ['PA', 'PG', 'juros simples', 'juros compostos', 'revisão de probabilidade'],
+  'Geom. plana / trig. I': ['geometria plana', 'trigonometria no triângulo retângulo', 'círculo trigonométrico'],
+  'Geometria espacial': ['prismas', 'pirâmides', 'cilindro', 'cone', 'esfera', 'volume e área'],
+  'Geometria analítica': ['ponto', 'reta', 'circunferência', 'distância entre pontos', 'equação da reta'],
+
+  // === HISTÓRIA ===
+  'Brasil Colônia I': ['economia colonial', 'escravidão', 'administração colonial', 'sociedade colonial'],
+  'Brasil Império': ['independência', 'primeiro reinado', 'regências', 'segundo reinado', 'abolição'],
+  'República Velha e Era Vargas': ['República Velha', 'coronelismo', 'Era Vargas', 'Estado Novo', 'industrialização'],
+  'Mundo contemporâneo I': ['Revolução Francesa', 'Revolução Industrial', 'imperialismo', '1ª Guerra Mundial'],
+  'Mundo contemporâneo II': ['2ª Guerra Mundial', 'Guerra Fria', 'descolonização', 'globalização'],
+  'Revisão 80/20 História': ['temas de maior incidência', 'questões recorrentes', 'revisão dirigida'],
+
+  // === GEOGRAFIA ===
+  'Geografia física I': ['relevo', 'clima', 'vegetação', 'hidrografia'],
+  'Geografia física II': ['solo', 'recursos naturais', 'meio ambiente', 'impactos ambientais'],
+  'Espaço brasileiro I': ['população', 'urbanização', 'migração', 'regiões brasileiras'],
+  'Espaço brasileiro II': ['economia brasileira', 'industrialização', 'agropecuária', 'infraestrutura'],
+  'Geopolítica': ['ordem mundial', 'blocos econômicos', 'conflitos', 'organizações internacionais'],
+  'Revisão 80/20 Geo.': ['temas de maior incidência', 'questões recorrentes', 'revisão dirigida'],
+
+  // === LÍNGUA ESTRANGEIRA ===
+  'Leitura I': ['ideia central', 'cognatos', 'inferência', 'vocabulário contextual'],
+  'Leitura II': ['intenção comunicativa', 'gêneros textuais', 'elementos coesivos'],
+  'Leitura III': ['interpretação avançada', 'argumentação', 'ponto de vista do autor'],
+  'Leitura IV': ['aspectos gramaticais voltados para leitura', 'tempos verbais em contexto', 'conectivos'],
+
+  // === SEMANAS DE REVISÃO (10-12) ===
+  'Revisão forte': ['revisão dos conteúdos de maior incidência', 'resolução intensiva de questões', 'correção de erros recorrentes'],
+  'Revisão por questões': ['questões por tópico', 'simulados parciais', 'análise de erros'],
+  'Questões + disc. avançada': ['questões de nível avançado', 'discursivas complexas', 'treino de tempo'],
+  'Questões focadas': ['questões dos temas mais cobrados', 'revisão ativa', 'resolução comentada'],
+  'Leitura e questões': ['leitura e interpretação', 'questões de vestibular', 'prática contextual'],
+  'Revisão 80/20 Mat.': ['temas de maior incidência', 'questões recorrentes', 'revisão dirigida'],
+  'Revisão final': ['revisão geral dos conteúdos principais', 'simulado', 'prova anterior', 'correção de erros'],
+};
+
+// ==========================================
+// EXPAND/COLLAPSE PARA TÓPICOS
+// ==========================================
+let expandedTopics = new Set();
+
+function toggleTopicExpand(key) {
+  if (expandedTopics.has(key)) {
+    expandedTopics.delete(key);
+  } else {
+    expandedTopics.add(key);
+  }
+}
+
 // Map of days with their structure
 const DAYS_OF_WEEK = [
   { name: 'Segunda', key: 'seg', mirror: 'Qui', blockIndex: 0, discursiva: 'Biologia', hasAcumulo: true },
@@ -410,13 +503,23 @@ function renderWeeklyView() {
           ? '<span class="role-tag role-ancora">ÂNCORA</span>'
           : '<span class="role-tag role-apoio">APOIO</span>';
         const pillRole = s.role === 'ancora' ? 'pill-ancora' : 'pill-apoio';
+        const topicKey = `weekly_w${w.week}_${b.mirror}_${s.id}`;
+        const topicos = TOPICOS_POR_MATERIA[s.topic] || [];
+        const isExpanded = expandedTopics.has(topicKey);
+        const hasTopics = topicos.length > 0;
+        const toggleIcon = hasTopics ? (isExpanded ? '▼' : '▶') : '';
+        const topicListHtml = (hasTopics && isExpanded)
+          ? `<div class="topic-list">${topicos.map(t => `<div class="topic-item">• ${t}</div>`).join('')}</div>`
+          : '';
         subjectsHtml += `
-          <div class="subject-pill ${sub.pillClass} ${pillRole}">
+          <div class="subject-pill ${sub.pillClass} ${pillRole} ${hasTopics ? 'has-topics' : ''}" ${hasTopics ? `onclick="toggleTopicExpand('${topicKey}'); renderWeeklyView();"` : ''}>
             <span class="subject-dot"></span>
             <span class="subject-name">${sub.name}</span>
             ${roleTag}
             <span class="subject-topic">${s.topic}</span>
-          </div>`;
+            ${hasTopics ? `<span class="topic-toggle">${toggleIcon}</span>` : ''}
+          </div>
+          ${topicListHtml}`;
       });
 
       const discColor = {
@@ -545,12 +648,23 @@ function renderDailyCards(weekData) {
         const itemKey = `construcao${i + 1}`;
         const checked = isChecked(weekData.week, day.key, itemKey);
         const roleLabel = s.role === 'ancora' ? '⚓' : '📘';
+        const topicKey = `daily_w${weekData.week}_${day.key}_${s.id}`;
+        const topicos = TOPICOS_POR_MATERIA[s.topic] || [];
+        const isExpanded = expandedTopics.has(topicKey);
+        const hasTopics = topicos.length > 0;
+        const toggleIcon = hasTopics ? (isExpanded ? '▼' : '▶') : '';
+        const topicListHtml = (hasTopics && isExpanded)
+          ? `<div class="topic-list topic-list-daily">${topicos.map(t => `<div class="topic-item">• ${t}</div>`).join('')}</div>`
+          : '';
         construcaoItems += `
-          <li class="${checked ? 'checked' : ''}" onclick="handleCheckClick(${weekData.week},'${day.key}','${itemKey}',this)">
-            <span class="check-box">${checked ? '✓' : ''}</span>
-            <span class="check-label">${roleLabel} ${sub.name} — ${s.topic}</span>
+          <li class="${checked ? 'checked' : ''}">
+            <span class="check-box" onclick="handleCheckClick(${weekData.week},'${day.key}','${itemKey}',this.parentElement)">${checked ? '✓' : ''}</span>
+            <span class="check-label" ${hasTopics ? `onclick="toggleTopicExpand('${topicKey}'); document.getElementById('daily-view-${weekData.week}').innerHTML = renderDailyCards(WEEKS_DATA[${weekData.week - 1}]);" style="cursor:pointer;"` : ''}>
+              ${roleLabel} ${sub.name} — ${s.topic} ${hasTopics ? `<span class="topic-toggle-inline">${toggleIcon}</span>` : ''}
+            </span>
             <span class="check-type type-construcao">C</span>
-          </li>`;
+          </li>
+          ${topicListHtml}`;
       });
       sections += `
         <div class="day-section">
