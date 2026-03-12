@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mentoria Medicina — Dashboard de Estudos</title>
+  <meta name="description"
+    content="Dashboard visual de acompanhamento de mentoria para vestibular de Medicina. 12 semanas de cronograma com técnica espelho, 80/20 e acompanhamento diário.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <!-- Mobile toggle -->
+  <button class="mobile-toggle" aria-label="Menu">☰</button>
+  <div class="sidebar-overlay"></div>
+
+  <div class="app-layout">
+
+    <!-- ========== SIDEBAR ========== -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">🩺</div>
+          <div class="sidebar-logo-text">
+            <h1>Mentoria Med</h1>
+            <span>Dashboard de Estudos</span>
+          </div>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Painel</div>
+        <div class="nav-item active" data-section="overview">
+          <span class="nav-icon">📊</span> Visão Geral
+        </div>
+        <div class="nav-item" data-section="weekly">
+          <span class="nav-icon">📅</span> Visão Semanal
+          <span class="nav-badge">12</span>
+        </div>
+        <div class="nav-item" data-section="subjects">
+          <span class="nav-icon">📚</span> Progresso por Matéria
+          <span class="nav-badge">8</span>
+        </div>
+        <div class="nav-item" data-section="weekprogress">
+          <span class="nav-icon">📈</span> Progresso por Semana
+        </div>
+
+        <div class="nav-section-label">Configurações</div>
+        <div class="nav-item" data-section="rotation">
+          <span class="nav-icon">🔄</span> Campo de Rotação
+        </div>
+        <div class="nav-item" data-section="execution">
+          <span class="nav-icon">✅</span> Status de Execução
+        </div>
+      </nav>
+    </aside>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="main-content">
+
+      <!-- Content Header -->
+      <header class="content-header">
+        <h2 id="header-title">Visão Geral</h2>
+        <div class="header-meta">
+          <div class="meta-badge">📅 12 semanas</div>
+          <div class="meta-badge">📖 7 matérias</div>
+          <div class="meta-badge">🎯 80/20</div>
+        </div>
+      </header>
+
+      <div class="content-body">
+
+        <!-- ===== SECTION: OVERVIEW ===== -->
+        <div class="section-view active" id="section-overview">
+
+          <!-- Executive Summary (dynamic) -->
+          <div class="exec-summary" id="exec-summary"></div>
+
+          <!-- Pedagogical Legend -->
+          <div class="ped-legend">
+            <div class="ped-legend-item">
+              <span class="ped-legend-icon">⚓</span>
+              <span><strong>Âncora</strong> — Matéria principal do bloco (Bio, Quím, Fís). Recebe discursiva.</span>
+            </div>
+            <div class="ped-legend-item">
+              <span class="ped-legend-icon">📘</span>
+              <span><strong>Apoio</strong> — Matéria secundária do bloco (Mat, Hist, Geo, Líng).</span>
+            </div>
+            <div class="ped-legend-item">
+              <span class="ped-legend-icon">🔄</span>
+              <span><strong>Rotativa</strong> — Matéria que pode ficar de fora na semana.</span>
+            </div>
+            <div class="ped-legend-item">
+              <span class="ped-legend-icon">🇧🇷</span>
+              <span><strong>Português</strong> — Paralelo fixo, diário por questões. Inclui Literatura.</span>
+            </div>
+            <div class="ped-legend-item">
+              <span class="ped-legend-icon">✍️</span>
+              <span><strong>Discursiva</strong> — 1 por dia, vinculada à matéria âncora do bloco.</span>
+            </div>
+            <div class="ped-legend-item">
+              <span class="ped-legend-icon">📦</span>
+              <span><strong>Acúmulo</strong> — Revisão acumulativa, toda segunda-feira.</span>
+            </div>
+          </div>
+
+          <!-- Stat cards -->
+          <div class="overview-grid">
+            <div class="stat-card">
+              <div class="stat-icon" style="background:var(--accent-primary-soft);color:var(--accent-secondary);">📅
+              </div>
+              <div class="stat-info">
+                <h3>12 Semanas</h3>
+                <p>Duração total do cronograma</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:var(--success-soft);color:var(--success);">📚</div>
+              <div class="stat-info">
+                <h3>7 Matérias</h3>
+                <p>+ Português diário por questões</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:var(--warning-soft);color:var(--warning);">6️⃣</div>
+              <div class="stat-info">
+                <h3>6 por Semana</h3>
+                <p>1 matéria fica de fora por semana</p>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon" style="background:var(--priority-parallel-soft);color:var(--priority-parallel);">✍️
+              </div>
+              <div class="stat-info">
+                <h3>1 Discursiva/dia</h3>
+                <p>Vinculada à matéria âncora</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Methodology Cards -->
+          <div class="methodology-cards">
+            <div class="method-card">
+              <div class="method-icon" style="background:var(--accent-primary-soft);color:var(--accent-secondary);">🔄
+              </div>
+              <h4>Técnica Espelho</h4>
+              <p>A semana funciona em espelho: o que se estuda num dia, reforça-se no par.</p>
+              <ul>
+                <li>Segunda ↔ Quinta</li>
+                <li>Terça ↔ Sexta</li>
+                <li>Quarta ↔ Sábado</li>
+                <li>Domingo = Folga</li>
+              </ul>
+            </div>
+
+            <div class="method-card">
+              <div class="method-icon" style="background:var(--warning-soft);color:var(--warning);">📦</div>
+              <h4>Técnica do Acúmulo</h4>
+              <p>Realizada toda segunda-feira. Revisão acumulativa dos conteúdos anteriores para fixação de longo prazo.
+              </p>
+            </div>
+
+            <div class="method-card">
+              <div class="method-icon" style="background:rgba(249,115,22,0.10);color:#fb923c;">🇧🇷</div>
+              <h4>Português Diário</h4>
+              <p>Português fica FORA do ciclo principal. Trabalhado TODOS OS DIAS apenas por questões. Já absorve
+                Literatura.</p>
+            </div>
+
+            <div class="method-card">
+              <div class="method-icon" style="background:var(--priority-parallel-soft);color:var(--priority-parallel);">
+                ✍️</div>
+              <h4>Discursiva Diária</h4>
+              <p>1 discursiva por dia vinculada à matéria âncora do dia.</p>
+              <ul>
+                <li>Seg/Qui → Biologia</li>
+                <li>Ter/Sex → Química</li>
+                <li>Qua/Sáb → Física</li>
+              </ul>
+            </div>
+
+            <div class="method-card">
+              <div class="method-icon" style="background:var(--priority-max-soft);color:var(--priority-max);">🎯</div>
+              <h4>80/20 — O que mais cai</h4>
+              <p>O cronograma NÃO esgota o edital. Foca nos assuntos de maior incidência, distribuindo mais tempo e
+                repetição para alta prioridade.</p>
+            </div>
+
+            <div class="method-card">
+              <div class="method-icon" style="background:var(--success-soft);color:var(--success);">📋</div>
+              <h4>Fluxo Diário</h4>
+              <p>Estrutura de cada dia de estudo:</p>
+              <ul>
+                <li>Construção de 2 matérias (âncora + apoio)</li>
+                <li>Questões do dia anterior</li>
+                <li>Português por questões</li>
+                <li>1 discursiva da âncora</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Priority Hierarchy -->
+          <div class="card mt-24">
+            <div class="card-header">
+              <div class="card-title">Hierarquia de Prioridade</div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+              <div
+                style="padding:16px;border-radius:var(--radius-md);background:var(--priority-max-soft);border:1px solid rgba(239,68,68,0.15);">
+                <div
+                  style="font-size:0.68rem;font-weight:800;color:var(--priority-max);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">
+                  ⚓ Prioridade Máxima (Âncora)</div>
+                <div style="font-size:0.85rem;color:var(--text-primary);">Biologia</div>
+                <div style="font-size:0.85rem;color:var(--text-primary);">Química</div>
+              </div>
+              <div
+                style="padding:16px;border-radius:var(--radius-md);background:var(--priority-high-soft);border:1px solid rgba(245,158,11,0.15);">
+                <div
+                  style="font-size:0.68rem;font-weight:800;color:var(--priority-high);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">
+                  📘 Prioridade Alta (Apoio)</div>
+                <div style="font-size:0.85rem;color:var(--text-primary);">Física</div>
+                <div style="font-size:0.85rem;color:var(--text-primary);">Matemática</div>
+              </div>
+              <div
+                style="padding:16px;border-radius:var(--radius-md);background:var(--priority-mid-soft);border:1px solid rgba(59,130,246,0.15);">
+                <div
+                  style="font-size:0.68rem;font-weight:800;color:var(--priority-mid);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">
+                  🔄 Prioridade Média (Rotativa)</div>
+                <div style="font-size:0.85rem;color:var(--text-primary);">História</div>
+                <div style="font-size:0.85rem;color:var(--text-primary);">Geografia</div>
+                <div style="font-size:0.85rem;color:var(--text-primary);">Língua Estrangeira</div>
+              </div>
+              <div
+                style="padding:16px;border-radius:var(--radius-md);background:var(--priority-parallel-soft);border:1px solid rgba(139,92,246,0.15);">
+                <div
+                  style="font-size:0.68rem;font-weight:800;color:var(--priority-parallel);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">
+                  🟣 Paralelo Fixo</div>
+                <div style="font-size:0.85rem;color:var(--text-primary);">Português por questões</div>
+                <div style="font-size:0.85rem;color:var(--text-primary);">Discursiva diária</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== SECTION: WEEKLY ===== -->
+        <div class="section-view" id="section-weekly">
+          <div class="weeks-grid" id="weeks-container"></div>
+        </div>
+
+        <!-- ===== SECTION: SUBJECTS ===== -->
+        <div class="section-view" id="section-subjects">
+          <div class="subjects-grid" id="subjects-container"></div>
+        </div>
+
+        <!-- ===== SECTION: WEEK PROGRESS ===== -->
+        <div class="section-view" id="section-weekprogress">
+          <div class="week-progress-grid" id="weekprogress-container"></div>
+        </div>
+
+        <!-- ===== SECTION: ROTATION ===== -->
+        <div class="section-view" id="section-rotation">
+          <div class="rotation-section" id="rotation-container"></div>
+        </div>
+
+        <!-- ===== SECTION: EXECUTION ===== -->
+        <div class="section-view" id="section-execution">
+          <div id="execution-container"></div>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
