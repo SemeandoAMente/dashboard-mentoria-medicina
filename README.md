@@ -80,6 +80,7 @@ O projeto prioriza as disciplinas estratégicas para Medicina (Método de Pesos)
 </h2>
 </div>
 
+
 [(Voltar para o topo)](#top)
 
 | Dia da Semana | Matérias Principais | Foco Discursivo |
