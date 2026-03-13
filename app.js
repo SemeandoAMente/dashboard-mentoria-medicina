@@ -251,10 +251,23 @@ async function syncFromFirebase() {
     if (!res.ok) return;
     const cloudData = await res.json();
     if (!cloudData) return;
-    // Merge: cloud wins for any key present in cloud
-    Object.assign(appState, cloudData);
+
+    // Merge checks: true always wins (checked on any device stays checked)
+    if (cloudData.checks) {
+      Object.keys(cloudData.checks).forEach(key => {
+        appState.checks[key] = cloudData.checks[key] || appState.checks[key];
+      });
+    }
+
+    // Merge other fields (weekObs, rotation, exec, mentoriaNota, alunaNota, startDate)
+    const { checks: _c, ...rest } = cloudData;
+    Object.assign(appState, rest);
+
     localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
     showCloudSyncBadge();
+
+    // Re-render current section with synced data
+    if (typeof currentSection !== 'undefined') navigateTo(currentSection);
   } catch (e) { /* offline or error — stay with localStorage */ }
 }
 
@@ -301,15 +314,29 @@ function isChecked(weekNum, dayKey, itemKey) {
   return !!appState.checks[`w${weekNum}_${dayKey}_${itemKey}`];
 }
 
+// Mapeamento exec → chaves de checks (construcao cobre construcao1 + construcao2)
+const EXEC_TO_CHECK_KEYS = {
+  construcao: ['construcao1', 'construcao2'],
+  questoes:   ['questoes'],
+  portugues:  ['portugues'],
+  discursiva: ['discursiva'],
+  acumulo:    ['acumulo'],
+};
+
 function toggleExec(weekNum, dayKey, type) {
-  const key = `exec_w${weekNum}_${dayKey}_${type}`;
-  appState.exec[key] = !appState.exec[key];
+  const keys = EXEC_TO_CHECK_KEYS[type] || [type];
+  const allDone = keys.every(k => isChecked(weekNum, dayKey, k));
+  const newState = !allDone;
+  keys.forEach(k => {
+    appState.checks[`w${weekNum}_${dayKey}_${k}`] = newState;
+  });
   saveState(appState);
-  return appState.exec[key];
+  return newState;
 }
 
 function isExecDone(weekNum, dayKey, type) {
-  return !!appState.exec[`exec_w${weekNum}_${dayKey}_${type}`];
+  const keys = EXEC_TO_CHECK_KEYS[type] || [type];
+  return keys.every(k => isChecked(weekNum, dayKey, k));
 }
 
 function getWeekObs(weekNum) {
@@ -458,8 +485,15 @@ function getCurrentWeek() {
 // RENDERING
 // ==========================================
 let currentSection = 'overview';
+let _mentoraInterval = null;
 
 function navigateTo(section) {
+  // Limpa auto-refresh ao sair da visão da mentora
+  if (section !== 'mentora' && _mentoraInterval) {
+    clearInterval(_mentoraInterval);
+    _mentoraInterval = null;
+  }
+
   currentSection = section;
   document.querySelectorAll('.nav-item').forEach(el => {
     el.classList.toggle('active', el.dataset.section === section);
@@ -474,6 +508,7 @@ function navigateTo(section) {
     'weekprogress': 'Progresso por Semana',
     'rotation': 'Campo de Rotação',
     'execution': 'Status de Execução',
+    'mentora': 'Visão da Mentora',
   };
   document.getElementById('header-title').textContent = titles[section] || 'Dashboard';
 
@@ -484,6 +519,13 @@ function navigateTo(section) {
   if (section === 'weekprogress') renderWeekProgressView();
   if (section === 'rotation') renderRotationView();
   if (section === 'execution') renderExecutionView();
+  if (section === 'mentora') {
+    refreshMentoraView();
+    // Auto-refresh a cada 30s enquanto a mentora estiver na página
+    if (!_mentoraInterval) {
+      _mentoraInterval = setInterval(refreshMentoraView, 30000);
+    }
+  }
 }
 
 // ---------- Overview ----------
@@ -1144,6 +1186,106 @@ function handleExecToggle(weekNum, dayKey, type, el) {
   const done = toggleExec(weekNum, dayKey, type);
   // Re-render execution view for consistent styling
   renderExecutionView();
+}
+
+// ==========================================
+// VISÃO DA MENTORA
+// ==========================================
+function renderMentoraView() {
+  const container = document.getElementById('mentora-container');
+  if (!container) return;
+
+  const now = new Date().toLocaleTimeString('pt-BR');
+  const days = ['seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
+  const dayLabels = { seg: 'Seg', ter: 'Ter', qua: 'Qua', qui: 'Qui', sex: 'Sex', sab: 'Sáb' };
+  const execTypes = ['construcao', 'questoes', 'portugues', 'discursiva'];
+  const typeLabel = { construcao: 'C', questoes: 'Q', portugues: 'P', discursiva: 'D', acumulo: 'A' };
+  const typeColor = {
+    construcao: 'var(--accent-primary)',
+    questoes: 'var(--success)',
+    portugues: '#f97316',
+    discursiva: 'var(--priority-parallel)',
+    acumulo: 'var(--warning)',
+  };
+
+  let html = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+      <div style="font-size:0.78rem;color:var(--text-secondary);">Atualizado às ${now} · auto-refresh a cada 30s</div>
+      <button onclick="refreshMentoraView()" style="background:var(--accent-primary);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;">☁ Atualizar agora</button>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;font-size:0.72rem;">
+      <span style="display:inline-flex;align-items:center;gap:4px;"><span style="background:var(--accent-primary);color:#fff;padding:2px 7px;border-radius:4px;font-weight:700;">C</span> Construção</span>
+      <span style="display:inline-flex;align-items:center;gap:4px;"><span style="background:var(--success);color:#fff;padding:2px 7px;border-radius:4px;font-weight:700;">Q</span> Questões</span>
+      <span style="display:inline-flex;align-items:center;gap:4px;"><span style="background:#f97316;color:#fff;padding:2px 7px;border-radius:4px;font-weight:700;">P</span> Português</span>
+      <span style="display:inline-flex;align-items:center;gap:4px;"><span style="background:var(--priority-parallel);color:#fff;padding:2px 7px;border-radius:4px;font-weight:700;">D</span> Discursiva</span>
+      <span style="display:inline-flex;align-items:center;gap:4px;"><span style="background:var(--warning);color:#fff;padding:2px 7px;border-radius:4px;font-weight:700;">A</span> Acúmulo (Seg)</span>
+    </div>
+    <div class="mentora-grid">`;
+
+  WEEKS_DATA.forEach(w => {
+    const progress = calcWeekProgress(w.week);
+    const pColor = progress >= 80 ? 'var(--success)' : progress >= 40 ? 'var(--warning)' : 'var(--text-muted)';
+
+    let rowsHtml = '';
+    days.forEach(dayKey => {
+      const dayTypes = [...execTypes];
+      if (dayKey === 'seg') dayTypes.push('acumulo');
+
+      let indicators = '';
+      dayTypes.forEach(t => {
+        const done = isExecDone(w.week, dayKey, t);
+        indicators += `<span style="
+          display:inline-flex;align-items:center;justify-content:center;
+          width:24px;height:24px;border-radius:5px;font-size:10px;font-weight:700;
+          background:${done ? typeColor[t] : 'var(--bg-tertiary)'};
+          color:${done ? '#fff' : 'var(--text-muted)'};
+          border:1px solid ${done ? typeColor[t] : 'var(--border-color)'};
+        ">${done ? '✓' : typeLabel[t]}</span>`;
+      });
+
+      rowsHtml += `
+        <div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--border-color);">
+          <span style="font-size:0.72rem;font-weight:700;color:var(--text-secondary);width:28px;flex-shrink:0;">${dayLabels[dayKey]}</span>
+          <div style="display:flex;gap:4px;">${indicators}</div>
+        </div>`;
+    });
+
+    html += `
+      <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:12px;padding:16px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+          <div>
+            <div style="font-weight:700;font-size:0.9rem;">Semana ${w.week}</div>
+            <div style="font-size:0.7rem;color:var(--text-secondary);">${w.phase}</div>
+          </div>
+          <div style="font-size:1.5rem;font-weight:800;color:${pColor};">${progress}%</div>
+        </div>
+        <div style="height:4px;background:var(--bg-tertiary);border-radius:2px;margin-bottom:12px;">
+          <div style="height:4px;background:${pColor};border-radius:2px;width:${progress}%;"></div>
+        </div>
+        ${rowsHtml}
+      </div>`;
+  });
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+async function refreshMentoraView() {
+  try {
+    const res = await fetch(FIREBASE_URL);
+    if (res.ok) {
+      const cloudData = await res.json();
+      if (cloudData && cloudData.checks) {
+        Object.keys(cloudData.checks).forEach(key => {
+          appState.checks[key] = cloudData.checks[key] || appState.checks[key];
+        });
+        const { checks: _c, ...rest } = cloudData;
+        Object.assign(appState, rest);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      }
+    }
+  } catch (e) { /* offline */ }
+  renderMentoraView();
 }
 
 // ==========================================
