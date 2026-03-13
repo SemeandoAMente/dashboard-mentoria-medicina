@@ -406,9 +406,12 @@ function getWeekCheckedCounts(weekNum) {
 }
 
 function getCurrentWeek() {
-  // Simple: calculate based on current date vs a configurable start
-  // For now, default to week 1. Override via appState.startDate if set.
-  return 1;
+  if (!appState.startDate) return 1;
+  const start = new Date(appState.startDate);
+  const now = new Date();
+  const diffDays = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+  const week = Math.floor(diffDays / 7) + 1;
+  return Math.max(1, Math.min(12, week));
 }
 
 // ==========================================
@@ -958,7 +961,7 @@ function renderRotationView() {
           </div>
           <div class="sensitivity-item critical">
             <span class="sensitivity-dot" style="background:var(--fis-color)"></span>
-            Física — Evitar retirar
+            Física — NÃO retirar
           </div>
           <div class="sensitivity-item critical">
             <span class="sensitivity-dot" style="background:var(--mat-color)"></span>
@@ -1120,6 +1123,29 @@ function handleExecToggle(weekNum, dayKey, type, el) {
 }
 
 // ==========================================
+// TOAST FEEDBACK DE SALVAMENTO
+// ==========================================
+function showSavedToast() {
+  let toast = document.getElementById('saved-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'saved-toast';
+    toast.style.cssText = [
+      'position:fixed', 'bottom:24px', 'right:24px', 'z-index:9999',
+      'background:#10b981', 'color:#fff', 'font-size:13px', 'font-weight:500',
+      'padding:8px 16px', 'border-radius:8px', 'box-shadow:0 4px 16px rgba(0,0,0,0.18)',
+      'display:flex', 'align-items:center', 'gap:6px',
+      'opacity:0', 'transition:opacity 0.2s', 'pointer-events:none'
+    ].join(';');
+    toast.textContent = '✓ Progresso salvo';
+    document.body.appendChild(toast);
+  }
+  toast.style.opacity = '1';
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => { toast.style.opacity = '0'; }, 1500);
+}
+
+// ==========================================
 // INITIALIZATION
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -1141,5 +1167,53 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.sidebar-overlay')?.classList.remove('open');
   });
 
+  // ---- Aviso de localStorage ----
+  const lsWarning = document.createElement('div');
+  lsWarning.style.cssText = [
+    'background:#fffbeb', 'border:1px solid #fde68a', 'border-radius:10px',
+    'padding:10px 16px', 'margin-bottom:16px', 'font-size:12px', 'color:#92400e',
+    'display:flex', 'align-items:center', 'gap:8px'
+  ].join(';');
+  lsWarning.innerHTML = '<span>&#9888;</span><span>Seu progresso é salvo <strong>neste dispositivo e navegador</strong>. Para não perder, não limpe o cache e acesse sempre pelo mesmo navegador.</span>';
+  const bodyEl = document.querySelector('.content-body');
+  if (bodyEl) bodyEl.insertBefore(lsWarning, bodyEl.firstChild);
+
+  // ---- Banner de data de início (só se ainda não configurou) ----
+  if (!appState.startDate) {
+    const banner = document.createElement('div');
+    banner.id = 'start-date-banner';
+    banner.style.cssText = [
+      'background:#f0fdf4', 'border:1px solid #bbf7d0', 'border-radius:10px',
+      'padding:12px 16px', 'margin-bottom:16px', 'font-size:13px', 'color:#166534',
+      'display:flex', 'align-items:center', 'gap:12px', 'flex-wrap:wrap'
+    ].join(';');
+    banner.innerHTML = '<span>&#128197; <strong>Defina a data de início do cronograma</strong> para acompanhar a semana automaticamente:</span>' +
+      '<input type="date" id="start-date-input" style="border:1px solid #86efac;border-radius:6px;padding:4px 8px;font-size:13px;color:#166534;background:#fff;cursor:pointer;">' +
+      '<button onclick="saveStartDate()" style="background:#16a34a;color:#fff;border:none;border-radius:6px;padding:5px 14px;font-size:13px;cursor:pointer;font-weight:600;">Confirmar</button>';
+    if (bodyEl) bodyEl.insertBefore(banner, bodyEl.firstChild);
+  }
+
   navigateTo('overview');
 });
+
+function saveStartDate() {
+  const input = document.getElementById('start-date-input');
+  if (!input || !input.value) return;
+  appState.startDate = input.value;
+  saveState(appState);
+  const banner = document.getElementById('start-date-banner');
+  if (banner) {
+    banner.style.background = '#dcfce7';
+    const d = new Date(input.value + 'T00:00:00');
+    banner.innerHTML = '&#9989; <strong>Data de início salva:</strong> ' + d.toLocaleDateString('pt-BR') + ' — o cronograma acompanhará a semana automaticamente.';
+    setTimeout(() => banner.remove(), 3000);
+  }
+  renderOverview();
+}
+
+// Patch original handleCheckClick para mostrar toast
+const _origHandleCheckClick = handleCheckClick;
+function handleCheckClick(weekNum, dayKey, itemKey, el) {
+  _origHandleCheckClick(weekNum, dayKey, itemKey, el);
+  showSavedToast();
+}
