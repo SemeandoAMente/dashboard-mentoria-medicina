@@ -1209,16 +1209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.sidebar-overlay')?.classList.remove('open');
   });
 
-  // ---- Aviso de localStorage ----
-  const lsWarning = document.createElement('div');
-  lsWarning.style.cssText = [
-    'background:#fffbeb', 'border:1px solid #fde68a', 'border-radius:10px',
-    'padding:10px 16px', 'margin-bottom:16px', 'font-size:12px', 'color:#92400e',
-    'display:flex', 'align-items:center', 'gap:8px'
-  ].join(';');
-  lsWarning.innerHTML = '<span>&#9888;</span><span>Seu progresso é salvo <strong>neste dispositivo e navegador</strong>. Para não perder, não limpe o cache e acesse sempre pelo mesmo navegador.</span>';
   const bodyEl = document.querySelector('.content-body');
-  if (bodyEl) bodyEl.insertBefore(lsWarning, bodyEl.firstChild);
 
   // ---- Banner de data de início (só se ainda não configurou) ----
   if (!appState.startDate) {
