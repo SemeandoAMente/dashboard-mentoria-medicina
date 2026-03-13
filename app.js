@@ -907,24 +907,6 @@ function renderWeekProgressView() {
       <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:12px;">
         <strong>Matérias:</strong> ${subjectNames.join(', ')} + Português
       </div>
-      <div class="week-stats">
-        <div class="week-stat">
-          <div class="stat-num">${counts.construcoes}/12</div>
-          <div class="stat-label">Construções</div>
-        </div>
-        <div class="week-stat">
-          <div class="stat-num">${counts.questoes}/6</div>
-          <div class="stat-label">Questões</div>
-        </div>
-        <div class="week-stat">
-          <div class="stat-num">${counts.discursivas}/6</div>
-          <div class="stat-label">Discursivas</div>
-        </div>
-        <div class="week-stat">
-          <div class="stat-num">${counts.portugues}/6</div>
-          <div class="stat-label">Português</div>
-        </div>
-      </div>
       <textarea class="week-obs-input" placeholder="Observações da semana ${w.week}..."
         onchange="setWeekObs(${w.week}, this.value)">${obs}</textarea>`;
 
