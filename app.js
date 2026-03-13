@@ -9,7 +9,7 @@
 const ALL_SUBJECTS = [
   { id: 'bio', name: 'Biologia', color: 'var(--bio-color)', pillClass: 'pill-bio', priority: 'maxima', priorityLabel: 'Máxima', type: 'ancora', typeLabel: 'Âncora', sensitive: true },
   { id: 'quim', name: 'Química', color: 'var(--quim-color)', pillClass: 'pill-quim', priority: 'maxima', priorityLabel: 'Máxima', type: 'ancora', typeLabel: 'Âncora', sensitive: true },
-  { id: 'fis', name: 'Física', color: 'var(--fis-color)', pillClass: 'pill-fis', priority: 'alta', priorityLabel: 'Alta', type: 'apoio', typeLabel: 'Apoio', sensitive: true },
+  { id: 'fis', name: 'Física', color: 'var(--fis-color)', pillClass: 'pill-fis', priority: 'maxima', priorityLabel: 'Máxima', type: 'ancora', typeLabel: 'Âncora', sensitive: true },
   { id: 'mat', name: 'Matemática', color: 'var(--mat-color)', pillClass: 'pill-mat', priority: 'alta', priorityLabel: 'Alta', type: 'apoio', typeLabel: 'Apoio', sensitive: true },
   { id: 'hist', name: 'História', color: 'var(--hist-color)', pillClass: 'pill-hist', priority: 'media', priorityLabel: 'Média', type: 'rotativa', typeLabel: 'Rotativa', sensitive: false },
   { id: 'geo', name: 'Geografia', color: 'var(--geo-color)', pillClass: 'pill-geo', priority: 'media', priorityLabel: 'Média', type: 'rotativa', typeLabel: 'Rotativa', sensitive: false },
