@@ -220,9 +220,10 @@ const DAYS_OF_WEEK = [
 ];
 
 // ==========================================
-// STATE MANAGEMENT
+// STATE MANAGEMENT — Firebase + localStorage fallback
 // ==========================================
 const STORAGE_KEY = 'mentoria_dashboard_v1';
+const FIREBASE_URL = 'https://mentoria-medicina-default-rtdb.firebaseio.com/state.json';
 
 function loadState() {
   try {
@@ -236,6 +237,45 @@ function saveState(state) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (e) { /* ignore */ }
+  // Persist to Firebase in background (fire-and-forget)
+  fetch(FIREBASE_URL, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(state)
+  }).catch(() => { /* ignore network errors */ });
+}
+
+async function syncFromFirebase() {
+  try {
+    const res = await fetch(FIREBASE_URL);
+    if (!res.ok) return;
+    const cloudData = await res.json();
+    if (!cloudData) return;
+    // Merge: cloud wins for any key present in cloud
+    Object.assign(appState, cloudData);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+    showCloudSyncBadge();
+  } catch (e) { /* offline or error — stay with localStorage */ }
+}
+
+function showCloudSyncBadge() {
+  let badge = document.getElementById('cloud-sync-badge');
+  if (!badge) {
+    badge = document.createElement('div');
+    badge.id = 'cloud-sync-badge';
+    badge.style.cssText = [
+      'position:fixed', 'bottom:24px', 'left:24px', 'z-index:9999',
+      'background:#3b82f6', 'color:#fff', 'font-size:12px', 'font-weight:500',
+      'padding:7px 14px', 'border-radius:8px', 'box-shadow:0 4px 16px rgba(0,0,0,0.18)',
+      'display:flex', 'align-items:center', 'gap:6px',
+      'opacity:0', 'transition:opacity 0.3s', 'pointer-events:none'
+    ].join(';');
+    badge.textContent = '☁ Progresso sincronizado da nuvem';
+    document.body.appendChild(badge);
+  }
+  badge.style.opacity = '1';
+  clearTimeout(badge._timeout);
+  badge._timeout = setTimeout(() => { badge.style.opacity = '0'; }, 2500);
 }
 
 let appState = loadState();
@@ -746,6 +786,8 @@ function handleCheckClick(weekNum, dayKey, itemKey, el) {
     if (bar) bar.style.width = progress + '%';
     if (label) label.lastChild.textContent = ' ' + progress + '%';
   }
+
+  showSavedToast();
 }
 
 // ---------- Subjects View ----------
@@ -1194,6 +1236,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   navigateTo('overview');
+
+  // Sync from Firebase on load
+  syncFromFirebase();
 });
 
 function saveStartDate() {
@@ -1211,9 +1256,3 @@ function saveStartDate() {
   renderOverview();
 }
 
-// Patch original handleCheckClick para mostrar toast
-const _origHandleCheckClick = handleCheckClick;
-function handleCheckClick(weekNum, dayKey, itemKey, el) {
-  _origHandleCheckClick(weekNum, dayKey, itemKey, el);
-  showSavedToast();
-}
