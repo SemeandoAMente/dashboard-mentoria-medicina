@@ -2009,3 +2009,55 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 16px;
 }
+
+/* ===== BOTÕES C/Q/P/D — DIA A DIA ===== */
+.day-act-grid {
+  margin-bottom: 12px;
+}
+.day-act-legend {
+  display: grid;
+  grid-template-columns: 40px repeat(4, 32px);
+  gap: 4px;
+  margin-bottom: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  text-align: center;
+}
+.day-act-row {
+  display: grid;
+  grid-template-columns: 40px repeat(4, 32px);
+  gap: 4px;
+  margin-bottom: 4px;
+  align-items: center;
+}
+.day-act-label {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+.day-act-btn {
+  width: 32px;
+  height: 28px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.day-act-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+.day-act-active {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: #fff !important;
+}

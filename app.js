@@ -303,6 +303,7 @@ if (!appState.weekObs) appState.weekObs = {};
 if (!appState.rotation) appState.rotation = {};
 if (!appState.exec) appState.exec = {};
 if (!appState.mentoriaNota) appState.mentoriaNota = {};
+if (!appState.dayActivity) appState.dayActivity = {};
 if (!appState.mentoriaNota['w9']) {
   appState.mentoriaNota['w9'] = 'Saúde entra apenas por questões, revisão curta ou aprendizado reverso.';
   saveState(appState);
@@ -513,7 +514,7 @@ function navigateTo(section) {
     'weekprogress': 'Progresso por Semana',
     'rotation': 'Campo de Rotação',
     'execution': 'Status de Execução',
-    'mentora': 'Visão da Mentora',
+    'mentora': 'Visão do Mentor',
   };
   document.getElementById('header-title').textContent = titles[section] || 'Dashboard';
 
@@ -911,6 +912,17 @@ function renderSubjectsView() {
 }
 
 // ---------- Week Progress View ----------
+function getDayActivity(week, dayKey, type) {
+  return appState.dayActivity[`w${week}_${dayKey}_${type}`] || false;
+}
+
+function toggleDayActivity(week, dayKey, type) {
+  const key = `w${week}_${dayKey}_${type}`;
+  appState.dayActivity[key] = !appState.dayActivity[key];
+  saveState(appState);
+  renderWeekProgressView();
+}
+
 function renderWeekProgressView() {
   const container = document.getElementById('weekprogress-container');
   container.innerHTML = '';
@@ -937,6 +949,27 @@ function renderWeekProgressView() {
       });
     });
 
+    const ACTIVITY_DAYS = [
+      { key: 'seg', label: 'Seg' }, { key: 'ter', label: 'Ter' }, { key: 'qua', label: 'Qua' },
+      { key: 'qui', label: 'Qui' }, { key: 'sex', label: 'Sex' }, { key: 'sab', label: 'Sáb' }
+    ];
+    const ACTIVITIES = [
+      { type: 'c', label: 'C', title: 'Construção' },
+      { type: 'q', label: 'Q', title: 'Questões' },
+      { type: 'p', label: 'P', title: 'Português' },
+      { type: 'd', label: 'D', title: 'Discursiva' }
+    ];
+
+    const activityRowsHtml = ACTIVITY_DAYS.map(day => {
+      const btns = ACTIVITIES.map(act => {
+        const active = getDayActivity(w.week, day.key, act.type);
+        return `<button class="day-act-btn${active ? ' day-act-active' : ''}"
+          title="${act.title}"
+          onclick="toggleDayActivity(${w.week},'${day.key}','${act.type}')">${act.label}</button>`;
+      }).join('');
+      return `<div class="day-act-row"><span class="day-act-label">${day.label}</span>${btns}</div>`;
+    }).join('');
+
     card.innerHTML = `
       <div class="week-progress-header">
         <h4>Semana ${w.week} — ${w.phase}</h4>
@@ -951,8 +984,18 @@ function renderWeekProgressView() {
           <div class="progress-bar-fill" style="width:${progress}%"></div>
         </div>
       </div>
-      <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:12px;">
+      <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:10px;">
         <strong>Matérias:</strong> ${subjectNames.join(', ')} + Português
+      </div>
+      <div class="day-act-grid">
+        <div class="day-act-legend">
+          <span></span>
+          <span title="Construção">C</span>
+          <span title="Questões">Q</span>
+          <span title="Português">P</span>
+          <span title="Discursiva">D</span>
+        </div>
+        ${activityRowsHtml}
       </div>
       <textarea class="week-obs-input" placeholder="Observações da semana ${w.week}..."
         onchange="setWeekObs(${w.week}, this.value)">${obs}</textarea>`;
