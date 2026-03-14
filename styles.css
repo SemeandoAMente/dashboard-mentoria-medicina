@@ -2061,3 +2061,16 @@ body {
   border-color: var(--accent-primary);
   color: #fff !important;
 }
+
+/* ===== CONTADOR C/Q/P/D ===== */
+.day-act-counter {
+  display: flex;
+  gap: 12px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.day-act-counter strong {
+  color: var(--text-secondary);
+}

@@ -912,14 +912,15 @@ function renderSubjectsView() {
 }
 
 // ---------- Week Progress View ----------
+// Mapeamento dos botões C/Q/P/D → tipos do exec (mesma chave de appState.checks)
+const ACTIVITY_TO_EXEC = { c: 'construcao', q: 'questoes', p: 'portugues', d: 'discursiva' };
+
 function getDayActivity(week, dayKey, type) {
-  return appState.dayActivity[`w${week}_${dayKey}_${type}`] || false;
+  return isExecDone(week, dayKey, ACTIVITY_TO_EXEC[type] || type);
 }
 
 function toggleDayActivity(week, dayKey, type) {
-  const key = `w${week}_${dayKey}_${type}`;
-  appState.dayActivity[key] = !appState.dayActivity[key];
-  saveState(appState);
+  toggleExec(week, dayKey, ACTIVITY_TO_EXEC[type] || type);
   renderWeekProgressView();
 }
 
@@ -986,6 +987,12 @@ function renderWeekProgressView() {
       </div>
       <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:10px;">
         <strong>Matérias:</strong> ${subjectNames.join(', ')} + Português
+      </div>
+      <div class="day-act-counter">
+        <span>C: <strong>${counts.construcoes}/12</strong></span>
+        <span>Q: <strong>${counts.questoes}/6</strong></span>
+        <span>P: <strong>${counts.portugues}/6</strong></span>
+        <span>D: <strong>${counts.discursivas}/6</strong></span>
       </div>
       <div class="day-act-grid">
         <div class="day-act-legend">
