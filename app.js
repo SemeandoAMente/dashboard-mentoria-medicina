@@ -886,10 +886,10 @@ function renderSubjectsView() {
     // Weeks
     let weeksHtml = '';
     if (sub.id === 'port') {
-      for (let i = 1; i <= 12; i++) weeksHtml += `<span class="subject-week-dot active-week">${i}</span>`;
+      for (let i = 1; i <= 13; i++) weeksHtml += `<span class="subject-week-dot active-week">${i}</span>`;
     } else {
       const { active, off } = getSubjectActiveWeeks(sub.id);
-      for (let i = 1; i <= 12; i++) {
+      for (let i = 1; i <= 13; i++) {
         if (off.includes(i)) weeksHtml += `<span class="subject-week-dot off-week">${i}</span>`;
         else if (active.includes(i)) weeksHtml += `<span class="subject-week-dot active-week">${i}</span>`;
         else weeksHtml += `<span class="subject-week-dot">${i}</span>`;
@@ -953,6 +953,7 @@ function getDayActivity(week, dayKey, type) {
 function toggleDayActivity(week, dayKey, type) {
   toggleExec(week, dayKey, ACTIVITY_TO_EXEC[type] || type);
   renderWeekProgressView();
+  showSavedToast();
 }
 
 function renderWeekProgressView() {
@@ -1270,8 +1271,8 @@ function renderExecutionView() {
 
 function handleExecToggle(weekNum, dayKey, type, el) {
   const done = toggleExec(weekNum, dayKey, type);
-  // Re-render execution view for consistent styling
   renderExecutionView();
+  showSavedToast();
 }
 
 // ==========================================
