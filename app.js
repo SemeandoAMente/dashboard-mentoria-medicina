@@ -545,7 +545,6 @@ function navigateTo(section) {
     'subjects': 'Progresso por Matéria',
     'weekprogress': 'Progresso por Semana',
     'rotation': 'Campo de Rotação',
-    'execution': 'Status de Execução',
     'mentora': 'Visão do Mentor',
   };
   document.getElementById('header-title').textContent = titles[section] || 'Dashboard';
@@ -556,7 +555,6 @@ function navigateTo(section) {
   if (section === 'subjects') renderSubjectsView();
   if (section === 'weekprogress') renderWeekProgressView();
   if (section === 'rotation') renderRotationView();
-  if (section === 'execution') renderExecutionView();
   if (section === 'mentora') {
     refreshMentoraView();
     // Auto-refresh a cada 30s enquanto a mentora estiver na página
@@ -1152,132 +1150,12 @@ function handleRotationChange(weekNum, subjectId) {
   // Re-render all views that depend on the rotation
   renderWeeklyView();
   renderRotationView();
-  // Refresh subjects and execution if they are currently active
+  // Refresh views that depend on the rotation
   if (currentSection === 'subjects') renderSubjectsView();
   if (currentSection === 'weekprogress') renderWeekProgressView();
-  if (currentSection === 'execution') renderExecutionView();
   if (currentSection === 'overview') renderOverview();
 }
 
-// ---------- Execution View ----------
-function renderExecutionView() {
-  const container = document.getElementById('execution-container');
-  container.innerHTML = '';
-
-  const legendHtml = `
-    <div style="margin-bottom:12px;padding:8px 14px;background:var(--bg-tertiary);border-radius:8px;border:1px solid var(--border-color);display:flex;align-items:center;gap:8px;">
-      <span style="font-size:0.75rem;color:var(--text-muted);">🔒</span>
-      <span style="font-size:0.75rem;color:var(--text-muted);font-style:italic;">Somente leitura — acompanhamento do mentor. Marque seu progresso em <strong style="font-style:normal;">Progresso por Semana</strong>.</span>
-    </div>
-    <div class="exec-legend">
-      <div class="exec-legend-item">
-        <span class="exec-legend-icon" style="background:var(--accent-primary-soft);color:var(--accent-secondary);border-color:rgba(99,102,241,0.2);">C</span> Construção
-      </div>
-      <div class="exec-legend-item">
-        <span class="exec-legend-icon" style="background:var(--success-soft);color:var(--success);border-color:rgba(16,185,129,0.2);">Q</span> Questões
-      </div>
-      <div class="exec-legend-item">
-        <span class="exec-legend-icon" style="background:rgba(249,115,22,0.10);color:#fb923c;border-color:rgba(249,115,22,0.2);">P</span> Português
-      </div>
-      <div class="exec-legend-item">
-        <span class="exec-legend-icon" style="background:var(--priority-parallel-soft);color:var(--priority-parallel);border-color:rgba(139,92,246,0.2);">D</span> Discursiva
-      </div>
-      <div class="exec-legend-item">
-        <span class="exec-legend-icon" style="background:var(--warning-soft);color:var(--warning);border-color:rgba(245,158,11,0.2);">A</span> Acúmulo <span style="color:var(--text-muted);font-size:0.7rem;">(só Seg)</span>
-      </div>
-      <div class="exec-legend-item">
-        <span class="exec-legend-icon" style="background:var(--success);border-color:var(--success);color:#fff;">✓</span> Concluído
-      </div>
-    </div>`;
-
-  container.innerHTML = legendHtml;
-
-  const gridDiv = document.createElement('div');
-  gridDiv.className = 'exec-grid';
-
-  WEEKS_DATA.forEach(w => {
-    const card = document.createElement('div');
-    card.className = 'execution-week-card';
-
-    const progress = calcWeekProgress(w.week);
-
-    let daysHtml = '';
-    DAYS_OF_WEEK.forEach(day => {
-      if (day.key === 'dom') {
-        daysHtml += `
-          <div class="exec-day-row" style="opacity:0.25">
-            <span class="exec-day-name">Dom</span>
-            <span style="font-size:0.72rem;color:var(--text-muted);">Folga</span>
-          </div>`;
-        return;
-      }
-
-      const types = ['construcao', 'questoes', 'portugues', 'discursiva'];
-      if (day.key === 'seg') types.push('acumulo');
-
-      const typeLabels = { construcao: 'C', questoes: 'Q', portugues: 'P', discursiva: 'D', acumulo: 'A' };
-      const typeTitles = { construcao: 'Construção', questoes: 'Questões', portugues: 'Português', discursiva: 'Discursiva', acumulo: 'Acúmulo' };
-      const typeStyles = {
-        construcao: 'var(--accent-primary-soft)',
-        questoes: 'var(--success-soft)',
-        portugues: 'rgba(249,115,22,0.10)',
-        discursiva: 'var(--priority-parallel-soft)',
-        acumulo: 'var(--warning-soft)',
-      };
-      const typeColorsDone = {
-        construcao: 'var(--accent-primary)',
-        questoes: 'var(--success)',
-        portugues: '#f97316',
-        discursiva: 'var(--priority-parallel)',
-        acumulo: 'var(--warning)',
-      };
-
-      let indicators = '';
-      types.forEach(t => {
-        const done = isExecDone(w.week, day.key, t);
-        const bg = done ? typeColorsDone[t] : '';
-        const borderC = done ? typeColorsDone[t] : '';
-        const style = done ? `background:${bg};border-color:${borderC};color:#fff;box-shadow:0 0 8px ${bg}33;` : '';
-        indicators += `
-          <div class="exec-indicator ${done ? 'done' : ''}"
-               title="${typeTitles[t]}"
-               style="${style}cursor:default;pointer-events:none;">
-            ${done ? '✓' : typeLabels[t]}
-          </div>`;
-      });
-
-      const dayAbbrevs = { seg: 'Seg', ter: 'Ter', qua: 'Qua', qui: 'Qui', sex: 'Sex', sab: 'Sáb' };
-
-      daysHtml += `
-        <div class="exec-day-row">
-          <span class="exec-day-name">${dayAbbrevs[day.key]}</span>
-          <div class="exec-indicators">${indicators}</div>
-        </div>`;
-    });
-
-    card.innerHTML = `
-      <div class="execution-week-header">
-        <h4>Semana ${w.week}</h4>
-        <div class="week-progress-mini">
-          <div class="week-progress-bar-mini">
-            <div class="week-progress-bar-fill-mini" style="width:${progress}%"></div>
-          </div>
-          ${progress}%
-        </div>
-      </div>
-      <div class="execution-week-body">${daysHtml}</div>`;
-
-    gridDiv.appendChild(card);
-  });
-
-  container.appendChild(gridDiv);
-}
-
-function handleExecToggle(weekNum, dayKey, type, el) {
-  const done = toggleExec(weekNum, dayKey, type);
-  renderExecutionView();
-  showSavedToast();
-}
 
 // ==========================================
 // VISÃO DA MENTORA
