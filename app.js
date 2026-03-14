@@ -399,9 +399,8 @@ let appState = loadState();
 if (!appState.checks) appState.checks = {};
 if (!appState.weekObs) appState.weekObs = {};
 if (!appState.rotation) appState.rotation = {};
-if (!appState.exec) appState.exec = {};
 if (!appState.mentoriaNota) appState.mentoriaNota = {};
-if (!appState.dayActivity) appState.dayActivity = {};
+if (!appState.startDate) appState.startDate = '2026-03-16';
 
 function toggleCheck(weekNum, dayKey, itemKey) {
   const key = `w${weekNum}_${dayKey}_${itemKey}`;
@@ -1503,41 +1502,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.sidebar-overlay')?.classList.remove('open');
   });
 
-  const bodyEl = document.querySelector('.content-body');
-
-  // ---- Banner de data de início (só se ainda não configurou) ----
-  if (!appState.startDate) {
-    const banner = document.createElement('div');
-    banner.id = 'start-date-banner';
-    banner.style.cssText = [
-      'background:#f0fdf4', 'border:1px solid #bbf7d0', 'border-radius:10px',
-      'padding:12px 16px', 'margin-bottom:16px', 'font-size:13px', 'color:#166534',
-      'display:flex', 'align-items:center', 'gap:12px', 'flex-wrap:wrap'
-    ].join(';');
-    banner.innerHTML = '<span>&#128197; <strong>Defina a data de início do cronograma</strong> para acompanhar a semana automaticamente:</span>' +
-      '<input type="date" id="start-date-input" style="border:1px solid #86efac;border-radius:6px;padding:4px 8px;font-size:13px;color:#166534;background:#fff;cursor:pointer;">' +
-      '<button onclick="saveStartDate()" style="background:#16a34a;color:#fff;border:none;border-radius:6px;padding:5px 14px;font-size:13px;cursor:pointer;font-weight:600;">Confirmar</button>';
-    if (bodyEl) bodyEl.insertBefore(banner, bodyEl.firstChild);
-  }
-
   navigateTo('overview');
 
   // Sync from Firebase on load
   syncFromFirebase();
 });
-
-function saveStartDate() {
-  const input = document.getElementById('start-date-input');
-  if (!input || !input.value) return;
-  appState.startDate = input.value;
-  saveState(appState);
-  const banner = document.getElementById('start-date-banner');
-  if (banner) {
-    banner.style.background = '#dcfce7';
-    const d = new Date(input.value + 'T00:00:00');
-    banner.innerHTML = '&#9989; <strong>Data de início salva:</strong> ' + d.toLocaleDateString('pt-BR') + ' — o cronograma acompanhará a semana automaticamente.';
-    setTimeout(() => banner.remove(), 3000);
-  }
-  renderOverview();
-}
 
