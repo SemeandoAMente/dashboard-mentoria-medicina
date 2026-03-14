@@ -285,12 +285,64 @@ function saveState(state) {
   }).catch(() => { /* ignore network errors */ });
 }
 
+// Migrates legacy dayActivity (w1_seg_c) and exec (exec_w1_seg_construcao) fields
+// into the current appState.checks format. Returns true if any migration was done.
+function migrateLegacyData(cloudData) {
+  let migrated = false;
+  const ACT = { c: 'construcao', q: 'questoes', p: 'portugues', d: 'discursiva' };
+
+  // dayActivity: keys like "w1_seg_c" → value true
+  if (cloudData.dayActivity) {
+    Object.entries(cloudData.dayActivity).forEach(([key, val]) => {
+      if (!val) return;
+      // key format: w{n}_{day}_{type}
+      const m = key.match(/^(w\d+)_([a-z]+)_([cqpd])$/);
+      if (!m) return;
+      const [, wk, day, act] = m;
+      const execType = ACT[act];
+      if (!execType) return;
+      const checkKeys = EXEC_TO_CHECK_KEYS[execType] || [execType];
+      checkKeys.forEach(ck => {
+        const checkKey = `${wk}_${day}_${ck}`;
+        if (!appState.checks[checkKey]) {
+          appState.checks[checkKey] = true;
+          migrated = true;
+        }
+      });
+    });
+  }
+
+  // exec: keys like "exec_w1_seg_construcao" → value true
+  if (cloudData.exec) {
+    Object.entries(cloudData.exec).forEach(([key, val]) => {
+      if (!val) return;
+      // key format: exec_{wk}_{day}_{type}
+      const m = key.match(/^exec_(w\d+)_([a-z]+)_([a-z]+)$/);
+      if (!m) return;
+      const [, wk, day, execType] = m;
+      const checkKeys = EXEC_TO_CHECK_KEYS[execType] || [execType];
+      checkKeys.forEach(ck => {
+        const checkKey = `${wk}_${day}_${ck}`;
+        if (!appState.checks[checkKey]) {
+          appState.checks[checkKey] = true;
+          migrated = true;
+        }
+      });
+    });
+  }
+
+  return migrated;
+}
+
 async function syncFromFirebase() {
   try {
     const res = await fetch(FIREBASE_URL);
     if (!res.ok) return;
     const cloudData = await res.json();
     if (!cloudData) return;
+
+    // Migrate legacy data formats before merging
+    const didMigrate = migrateLegacyData(cloudData);
 
     // Merge checks: true always wins (checked on any device stays checked)
     if (cloudData.checks) {
@@ -299,11 +351,22 @@ async function syncFromFirebase() {
       });
     }
 
-    // Merge other fields (weekObs, rotation, exec, mentoriaNota, alunaNota, startDate)
-    const { checks: _c, ...rest } = cloudData;
+    // Merge other fields (weekObs, rotation, mentoriaNota, alunaNota, startDate)
+    // Exclude legacy fields dayActivity and exec from being spread into appState
+    const { checks: _c, dayActivity: _da, exec: _ex, ...rest } = cloudData;
     Object.assign(appState, rest);
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+
+    // If migration happened, push cleaned state back to Firebase
+    if (didMigrate) {
+      fetch(FIREBASE_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(appState),
+      }).catch(() => {});
+    }
+
     showCloudSyncBadge();
 
     // Re-render current section with synced data
