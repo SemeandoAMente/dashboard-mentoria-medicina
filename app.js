@@ -339,7 +339,13 @@ async function syncFromFirebase() {
     const res = await fetch(FIREBASE_URL);
     if (!res.ok) return;
     const cloudData = await res.json();
-    if (!cloudData) return;
+    if (cloudData === null) {
+      // Firebase explicitamente vazio — novo usuário começa zerado
+      appState.checks = {};
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      if (typeof currentSection !== 'undefined') navigateTo(currentSection);
+      return;
+    }
 
     // Migrate legacy data formats before merging
     const didMigrate = migrateLegacyData(cloudData);
@@ -386,7 +392,7 @@ function showCloudSyncBadge() {
       'display:flex', 'align-items:center', 'gap:6px',
       'opacity:0', 'transition:opacity 0.3s', 'pointer-events:none'
     ].join(';');
-    badge.textContent = '☁ Progresso sincronizado da nuvem';
+    badge.innerHTML = `${ICO.cloud} Progresso sincronizado da nuvem`;
     document.body.appendChild(badge);
   }
   badge.style.opacity = '1';
@@ -420,6 +426,25 @@ const EXEC_TO_CHECK_KEYS = {
   portugues:  ['portugues'],
   discursiva: ['discursiva'],
   acumulo:    ['acumulo'],
+};
+
+// Ícones SVG inline reutilizáveis nos templates HTML
+const ICO = {
+  anchor:    '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="22"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/></svg>',
+  bookmark:  '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
+  refresh:   '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>',
+  pencil:    '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>',
+  box:       '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',
+  layers:    '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>',
+  help:      '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  book:      '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+  target:    '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+  clipboard: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>',
+  warn:      '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  cloud:     '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>',
+  lightning: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+  barChart:  '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;flex-shrink:0"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>',
+  moon:      '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
 };
 
 function toggleExec(weekNum, dayKey, type) {
@@ -716,14 +741,14 @@ function renderWeeklyView() {
       blocksHtml += `
         <div class="week-block">
           <div class="block-header">
-            <span class="block-mirror">🔄 ${b.mirror}</span>
-            <span class="block-disc-badge" style="${discColor}">✍️ ${b.discursiva}</span>
+            <span class="block-mirror">${ICO.refresh} ${b.mirror}</span>
+            <span class="block-disc-badge" style="${discColor}">${ICO.pencil} ${b.discursiva}</span>
           </div>
           <div class="block-subjects">${subjectsHtml}</div>
         </div>`;
     });
 
-    const phaseBadge8020 = '<span class="week-8020-badge">🎯 80/20</span>';
+    const phaseBadge8020 = `<span class="week-8020-badge">${ICO.target} 80/20</span>`;
 
     const mentoriaNota = getMentoriaNota(w.week);
     const alunaNota = getAlunaNota(w.week);
@@ -742,7 +767,7 @@ function renderWeeklyView() {
       <div class="week-card-body">
         ${blocksHtml}
         <div class="week-discursiva">
-          ✍️ <strong>Discursiva diária:</strong>&nbsp; Seg/Qui → Bio &nbsp;·&nbsp; Ter/Sex → Quím &nbsp;·&nbsp; Qua/Sáb → Fís
+          ${ICO.pencil} <strong>Discursiva diária:</strong>&nbsp; Seg/Qui → Bio &nbsp;·&nbsp; Ter/Sex → Quím &nbsp;·&nbsp; Qua/Sáb → Fís
         </div>
       </div>
       <div class="week-card-footer">
@@ -761,12 +786,12 @@ function renderWeeklyView() {
       </div>
       <div class="week-notes">
         <div class="week-note-field">
-          <div class="week-note-label wnl-mentoria">📋 Observação da Mentoria</div>
+          <div class="week-note-label wnl-mentoria">${ICO.clipboard} Observação da Mentoria</div>
           <textarea class="week-note-input" placeholder="Ex: focar em questões de genética..."
             onchange="setMentoriaNota(${w.week}, this.value)">${mentoriaNota}</textarea>
         </div>
         <div class="week-note-field">
-          <div class="week-note-label wnl-aluna">⚡ Ponto de Atenção da Aluna</div>
+          <div class="week-note-label wnl-aluna">${ICO.lightning} Ponto de Atenção da Aluna</div>
           <textarea class="week-note-input" placeholder="Ex: dificuldade em termologia..."
             onchange="setAlunaNota(${w.week}, this.value)">${alunaNota}</textarea>
         </div>
@@ -794,7 +819,7 @@ function renderDailyCards(weekData) {
     if (day.key === 'dom') {
       html += `
         <div class="day-card day-sunday">
-          <span>😴</span>
+          <span style="color:var(--text-muted)">${ICO.moon}</span>
           <div class="day-name" style="margin-top:8px;">Domingo</div>
           <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">Folga</div>
         </div>`;
@@ -814,7 +839,7 @@ function renderDailyCards(weekData) {
       const acuChecked = isChecked(weekData.week, day.key, 'acumulo');
       sections += `
         <div class="day-section">
-          <div class="day-section-label dsl-acumulo">📦 Técnica do Acúmulo</div>
+          <div class="day-section-label dsl-acumulo">${ICO.box} Técnica do Acúmulo</div>
           <ul class="checklist">
             <li class="${acuChecked ? 'checked' : ''}" onclick="handleCheckClick(${weekData.week},'${day.key}','acumulo',this)">
               <span class="check-box">${acuChecked ? '✓' : ''}</span>
@@ -832,7 +857,7 @@ function renderDailyCards(weekData) {
         const sub = getSubjectById(s.id);
         const itemKey = `construcao${i + 1}`;
         const checked = isChecked(weekData.week, day.key, itemKey);
-        const roleLabel = s.role === 'ancora' ? '⚓' : '📘';
+        const roleLabel = s.role === 'ancora' ? ICO.anchor : ICO.bookmark;
         const topicKey = `daily_w${weekData.week}_${day.key}_${s.id}`;
         const topicos = TOPICOS_POR_MATERIA[s.topic] || [];
         const isExpanded = expandedTopics.has(topicKey);
@@ -853,7 +878,7 @@ function renderDailyCards(weekData) {
       });
       sections += `
         <div class="day-section">
-          <div class="day-section-label dsl-construcao">🔨 Construção</div>
+          <div class="day-section-label dsl-construcao">${ICO.layers} Construção</div>
           <ul class="checklist">${construcaoItems}</ul>
         </div>`;
     }
@@ -863,7 +888,7 @@ function renderDailyCards(weekData) {
     const questLabel = isSaturday ? 'Questões das matérias de hoje' : 'Questões das matérias do dia anterior';
     sections += `
       <div class="day-section">
-        <div class="day-section-label dsl-questoes">❓ Questões</div>
+        <div class="day-section-label dsl-questoes">${ICO.help} Questões</div>
         <ul class="checklist">
           <li class="${questChecked ? 'checked' : ''}" onclick="handleCheckClick(${weekData.week},'${day.key}','questoes',this)">
             <span class="check-box">${questChecked ? '✓' : ''}</span>
@@ -877,7 +902,7 @@ function renderDailyCards(weekData) {
     const portChecked = isChecked(weekData.week, day.key, 'portugues');
     sections += `
       <div class="day-section">
-        <div class="day-section-label dsl-portugues">🇧🇷 Português</div>
+        <div class="day-section-label dsl-portugues">${ICO.book} Português</div>
         <ul class="checklist">
           <li class="${portChecked ? 'checked' : ''}" onclick="handleCheckClick(${weekData.week},'${day.key}','portugues',this)">
             <span class="check-box">${portChecked ? '✓' : ''}</span>
@@ -891,7 +916,7 @@ function renderDailyCards(weekData) {
     const discChecked = isChecked(weekData.week, day.key, 'discursiva');
     sections += `
       <div class="day-section">
-        <div class="day-section-label dsl-discursiva">✍️ Discursiva</div>
+        <div class="day-section-label dsl-discursiva">${ICO.pencil} Discursiva</div>
         <ul class="checklist">
           <li class="${discChecked ? 'checked' : ''}" onclick="handleCheckClick(${weekData.week},'${day.key}','discursiva',this)">
             <span class="check-box">${discChecked ? '✓' : ''}</span>
@@ -963,10 +988,10 @@ function renderSubjectsView() {
     const status = sub.id === 'port' ? 'paralelo' : getSubjectStatus(sub.id);
 
     const statusLabels = {
-      'nao-iniciado': '⬜ Não iniciado',
-      'em-andamento': '🔵 Em andamento',
-      'concluido': '✅ Concluído',
-      'paralelo': '🟣 Diário por questões',
+      'nao-iniciado': '○ Não iniciado',
+      'em-andamento': '◉ Em andamento',
+      'concluido': '✓ Concluído',
+      'paralelo': '● Diário por questões',
     };
     const statusClasses = {
       'nao-iniciado': 'status-nao-iniciado',
@@ -985,7 +1010,7 @@ function renderSubjectsView() {
       </div>
       <div class="subject-type-row">
         <span class="subject-type-tag ${stypeClasses[sub.type] || 'stype-apoio'}">${sub.typeLabel}</span>
-        ${sub.sensitive ? '<span class="subject-type-tag stype-ancora">⚠ Não retirar</span>' : ''}
+        ${sub.sensitive ? '<span class="subject-type-tag stype-ancora">! Não retirar</span>' : ''}
       </div>
       <div class="subject-weeks">${weeksHtml}</div>
       <div class="subject-progress">
@@ -1032,10 +1057,10 @@ function renderWeekProgressView() {
     const obs = getWeekObs(w.week);
 
     const statusBadge = progress >= 100
-      ? '<span class="subject-status-badge status-concluido">✅ Concluída</span>'
+      ? '<span class="subject-status-badge status-concluido">✓ Concluída</span>'
       : progress > 0
-        ? '<span class="subject-status-badge status-em-andamento">🔵 Em andamento</span>'
-        : '<span class="subject-status-badge status-nao-iniciado">⬜ Não iniciada</span>';
+        ? '<span class="subject-status-badge status-em-andamento">◉ Em andamento</span>'
+        : '<span class="subject-status-badge status-nao-iniciado">○ Não iniciada</span>';
 
     let subjectNames = [];
     w.blocks.forEach(b => {
@@ -1196,7 +1221,7 @@ function renderEstrategiaView() {
   container.innerHTML = `
     <!-- Intro explicativo -->
     <div class="estrat-intro">
-      <div style="font-size:1.5rem;margin-bottom:8px;">🎯</div>
+      <div style="margin-bottom:12px;color:var(--warning);"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
       <h3 style="font-size:1rem;font-weight:800;color:var(--text-heading);margin-bottom:8px;">Cronograma baseado em dados reais</h3>
       <p style="font-size:0.83rem;color:var(--text-secondary);line-height:1.6;">
         O cronograma de 13 semanas foi construído a partir da análise de <strong>980 questões reais da UNIT</strong> aplicadas em vestibulares anteriores. Cada semana respeita a <strong>Técnica Espelho</strong> (Seg↔Qui, Ter↔Sex, Qua↔Sáb), o tempo humano de construção de conhecimento e a <strong>Hierarquia 80/20</strong>: Bio, Quím e Fís recebem mais semanas e mais revisão porque são as matérias que mais aparecem na prova — e as que têm discursiva. Os tópicos de maior incidência entram primeiro no cronograma; os de baixa incidência são abordados de forma mais leve ou apenas nas semanas de revisão.
@@ -1206,7 +1231,7 @@ function renderEstrategiaView() {
     <!-- Edital Oficial -->
     <div class="card mt-24">
       <div class="card-header">
-        <div class="card-title">📋 Edital UNIT — Distribuição de Questões</div>
+        <div class="card-title">${ICO.clipboard} Edital UNIT — Distribuição de Questões</div>
       </div>
       <div style="overflow-x:auto;">
         <table class="estrat-table">
@@ -1233,7 +1258,7 @@ function renderEstrategiaView() {
     <!-- STRIX Analysis -->
     <div class="card mt-24">
       <div class="card-header">
-        <div class="card-title">📊 O que mais cai — Análise de 980 questões STRIX</div>
+        <div class="card-title">${ICO.barChart} O que mais cai — Análise de 980 questões STRIX</div>
         <div class="card-subtitle">Frequência de tópicos por matéria nas provas anteriores</div>
       </div>
       <div class="estrat-subjects-grid">
@@ -1257,7 +1282,7 @@ function renderRotationView() {
     ALL_SUBJECTS.forEach(s => {
       const selected = currentOut === s.id ? 'selected' : '';
       const isDefault = s.id === defaultOut ? ' (padrão)' : '';
-      const warn = s.sensitive ? ' ⚠️' : '';
+      const warn = s.sensitive ? ' !' : '';
       optionsHtml += `<option value="${s.id}" ${selected}>${s.name}${isDefault}${warn}</option>`;
     });
 
@@ -1273,7 +1298,7 @@ function renderRotationView() {
           </select>
         </td>
         <td style="color:var(--text-muted)">${getSubjectById(defaultOut).name}</td>
-        <td>${isSensitive ? '<span style="color:#f87171;font-size:0.75rem;font-weight:600;">⚠ Sensível</span>' : '<span style="color:var(--success);font-size:0.75rem;font-weight:600;">✓ OK</span>'}</td>
+        <td>${isSensitive ? '<span style="color:#f87171;font-size:0.75rem;font-weight:600;">! Sensível</span>' : '<span style="color:var(--success);font-size:0.75rem;font-weight:600;">✓ OK</span>'}</td>
       </tr>`;
   });
 
@@ -1301,7 +1326,7 @@ function renderRotationView() {
       </div>
 
       <div class="rotation-sensitivity">
-        <h5>⚠️ Sensibilidade de Rotação</h5>
+        <h5>${ICO.warn} Sensibilidade de Rotação</h5>
         <div class="sensitivity-grid">
           <div class="sensitivity-item critical">
             <span class="sensitivity-dot" style="background:var(--bio-color)"></span>
@@ -1380,7 +1405,7 @@ function renderMentoraView() {
   let html = `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
       <div style="font-size:0.78rem;color:var(--text-secondary);">Atualizado às ${now} · auto-refresh a cada 30s</div>
-      <button onclick="refreshMentoraView()" style="background:var(--accent-primary);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;">☁ Atualizar agora</button>
+      <button onclick="refreshMentoraView()" style="background:var(--accent-primary);color:#fff;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">${ICO.cloud} Atualizar agora</button>
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;font-size:0.72rem;">
       <span style="display:inline-flex;align-items:center;gap:4px;"><span style="background:var(--accent-primary);color:#fff;padding:2px 7px;border-radius:4px;font-weight:700;">C</span> Construção</span>

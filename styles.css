@@ -150,7 +150,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  color: #fff;
   box-shadow: var(--shadow-glow);
 }
 
@@ -374,8 +374,17 @@ body {
 }
 
 .ped-legend-icon {
-  font-size: 0.95rem;
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  color: inherit;
+}
+
+.ped-legend-icon svg {
+  display: block;
 }
 
 .ped-legend-item strong {
@@ -1796,7 +1805,7 @@ body {
     padding: 5px 8px;
   }
 
-  .ped-legend-item span {
+  .ped-legend-item > span:last-child {
     display: none;
   }
 
