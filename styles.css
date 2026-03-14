@@ -212,18 +212,20 @@ body {
 
 .nav-item .nav-icon,
 .nav-agent-btn .nav-icon {
-  width: 20px;
-  height: 20px;
-  display: flex;
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  color: inherit;
 }
 
 .nav-item .nav-icon svg,
 .nav-agent-btn .nav-icon svg {
   display: block;
   flex-shrink: 0;
+  overflow: visible;
 }
 
 .nav-item .nav-badge {
