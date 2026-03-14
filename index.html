@@ -8,7 +8,6 @@
   <meta name="description"
     content="Dashboard visual de acompanhamento de mentoria para vestibular de Medicina. 13 semanas de cronograma com técnica espelho, 80/20 e acompanhamento diário.">
   <link rel="stylesheet" href="styles.css">
-  <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
 </head>
 
 <body>
@@ -32,44 +31,89 @@
       </div>
       <nav class="sidebar-nav">
         <div class="nav-section-label">Painel</div>
+
         <div class="nav-item active" data-section="overview">
-          <span class="nav-icon"><iconify-icon icon="line-md:home" width="18"></iconify-icon></span> Visão Geral
+          <span class="nav-icon">
+            <!-- home -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </span>
+          Visão Geral
         </div>
+
         <div class="nav-item" data-section="weekly">
-          <span class="nav-icon"><iconify-icon icon="line-md:calendar" width="18"></iconify-icon></span> Visão Semanal
+          <span class="nav-icon">
+            <!-- calendar -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </span>
+          Visão Semanal
           <span class="nav-badge">13</span>
         </div>
+
         <div class="nav-item" data-section="subjects">
-          <span class="nav-icon"><iconify-icon icon="line-md:chart-multiple" width="18"></iconify-icon></span> Progresso por Matéria
+          <span class="nav-icon">
+            <!-- bar chart -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+          </span>
+          Progresso por Matéria
           <span class="nav-badge">8</span>
         </div>
+
         <div class="nav-item" data-section="weekprogress">
-          <span class="nav-icon"><iconify-icon icon="line-md:list-check" width="18"></iconify-icon></span> Progresso por Semana
+          <span class="nav-icon">
+            <!-- list with checks -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </span>
+          Progresso por Semana
         </div>
 
         <div class="nav-item" data-section="estrategia">
-          <span class="nav-icon"><iconify-icon icon="line-md:gauge" width="18"></iconify-icon></span> Estratégia 80/20
+          <span class="nav-icon">
+            <!-- target -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </span>
+          Estratégia 80/20
         </div>
 
         <div class="nav-section-label">Configurações</div>
+
         <div class="nav-item" data-section="rotation">
-          <span class="nav-icon"><iconify-icon icon="line-md:rotate" width="18"></iconify-icon></span> Campo de Rotação
+          <span class="nav-icon">
+            <!-- rotate/refresh -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          </span>
+          Campo de Rotação
         </div>
 
         <div class="nav-section-label">Mentoria</div>
+
         <div class="nav-item" data-section="mentora">
-          <span class="nav-icon"><iconify-icon icon="line-md:account-supervisor" width="18"></iconify-icon></span> Visão do Mentor
+          <span class="nav-icon">
+            <!-- eye -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </span>
+          Visão do Mentor
         </div>
 
         <div class="nav-section-label">Agentes IA</div>
+
         <a class="nav-agent-btn" href="https://chatgpt.com/g/g-69a72c55ea3c81918f10856a42426c1b-strix-24h-engenharia-reversa-unit" target="_blank" rel="noopener">
-          <span class="nav-icon"><iconify-icon icon="line-md:document-list" width="18"></iconify-icon></span> Agente de Questões
+          <span class="nav-icon">
+            <!-- document -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </span>
+          Agente de Questões
           <span class="nav-agent-arrow">↗</span>
         </a>
+
         <a class="nav-agent-btn" href="https://chatgpt.com/g/g-69a8840e5f488191a922a54093abb4c2-corretor-discursivo-unit-strix" target="_blank" rel="noopener">
-          <span class="nav-icon"><iconify-icon icon="line-md:edit" width="18"></iconify-icon></span> Agente de Discursiva
+          <span class="nav-icon">
+            <!-- pencil -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+          </span>
+          Agente de Discursiva
           <span class="nav-agent-arrow">↗</span>
         </a>
+
       </nav>
     </aside>
 
@@ -126,7 +170,8 @@
           <div class="overview-grid">
             <div class="stat-card">
               <div class="stat-icon" style="background:var(--accent-primary-soft);color:var(--accent-secondary);">
-                <iconify-icon icon="line-md:calendar" width="24"></iconify-icon>
+                <!-- calendar 24px -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
               </div>
               <div class="stat-info">
                 <h3>13 Semanas</h3>
@@ -135,7 +180,8 @@
             </div>
             <div class="stat-card">
               <div class="stat-icon" style="background:var(--success-soft);color:var(--success);">
-                <iconify-icon icon="line-md:chart-multiple" width="24"></iconify-icon>
+                <!-- bar chart 24px -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
               </div>
               <div class="stat-info">
                 <h3>7 Matérias</h3>
@@ -144,7 +190,8 @@
             </div>
             <div class="stat-card">
               <div class="stat-icon" style="background:var(--warning-soft);color:var(--warning);">
-                <iconify-icon icon="line-md:gauge" width="24"></iconify-icon>
+                <!-- target 24px -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
               </div>
               <div class="stat-info">
                 <h3>6 por Semana</h3>
@@ -153,7 +200,8 @@
             </div>
             <div class="stat-card">
               <div class="stat-icon" style="background:var(--priority-parallel-soft);color:var(--priority-parallel);">
-                <iconify-icon icon="line-md:pencil" width="24"></iconify-icon>
+                <!-- pencil 24px -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
               </div>
               <div class="stat-info">
                 <h3>1 Discursiva/dia</h3>
@@ -164,9 +212,11 @@
 
           <!-- Methodology Cards -->
           <div class="methodology-cards">
+
             <div class="method-card">
               <div class="method-icon" style="background:var(--accent-primary-soft);color:var(--accent-secondary);">
-                <iconify-icon icon="line-md:sync" width="24"></iconify-icon>
+                <!-- sync/mirror -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
               </div>
               <h4>Técnica Espelho</h4>
               <p>A semana funciona em espelho: o que se estuda num dia, reforça-se no par.</p>
@@ -180,25 +230,26 @@
 
             <div class="method-card">
               <div class="method-icon" style="background:var(--warning-soft);color:var(--warning);">
-                <iconify-icon icon="line-md:arrows-loop" width="24"></iconify-icon>
+                <!-- loop/layers -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
               </div>
               <h4>Técnica do Acúmulo</h4>
-              <p>Realizada toda segunda-feira. Revisão acumulativa dos conteúdos anteriores para fixação de longo prazo.
-              </p>
+              <p>Realizada toda segunda-feira. Revisão acumulativa dos conteúdos anteriores para fixação de longo prazo.</p>
             </div>
 
             <div class="method-card">
               <div class="method-icon" style="background:rgba(249,115,22,0.10);color:#fb923c;">
-                <iconify-icon icon="line-md:document" width="24"></iconify-icon>
+                <!-- document/file-text -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
               </div>
               <h4>Português Diário</h4>
-              <p>Português fica FORA do ciclo principal. Trabalhado TODOS OS DIAS apenas por questões. Já absorve
-                Literatura.</p>
+              <p>Português fica FORA do ciclo principal. Trabalhado TODOS OS DIAS apenas por questões. Já absorve Literatura.</p>
             </div>
 
             <div class="method-card">
               <div class="method-icon" style="background:var(--priority-parallel-soft);color:var(--priority-parallel);">
-                <iconify-icon icon="line-md:pencil" width="24"></iconify-icon>
+                <!-- pencil -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
               </div>
               <h4>Discursiva Diária</h4>
               <p>1 discursiva por dia vinculada à matéria âncora do dia.</p>
@@ -211,16 +262,17 @@
 
             <div class="method-card">
               <div class="method-icon" style="background:var(--priority-max-soft);color:var(--priority-max);">
-                <iconify-icon icon="line-md:chart-line" width="24"></iconify-icon>
+                <!-- trending up -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
               </div>
               <h4>80/20 — O que mais cai</h4>
-              <p>O cronograma NÃO esgota o edital. Foca nos assuntos de maior incidência, distribuindo mais tempo e
-                repetição para alta prioridade.</p>
+              <p>O cronograma NÃO esgota o edital. Foca nos assuntos de maior incidência, distribuindo mais tempo e repetição para alta prioridade.</p>
             </div>
 
             <div class="method-card">
               <div class="method-icon" style="background:var(--success-soft);color:var(--success);">
-                <iconify-icon icon="line-md:play-circle" width="24"></iconify-icon>
+                <!-- play circle -->
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
               </div>
               <h4>Fluxo Diário</h4>
               <p>Estrutura de cada dia de estudo:</p>
@@ -231,6 +283,7 @@
                 <li>1 discursiva da âncora</li>
               </ul>
             </div>
+
           </div>
 
           <!-- Priority Hierarchy -->
@@ -239,41 +292,30 @@
               <div class="card-title">Hierarquia de Prioridade</div>
             </div>
             <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
-              <div
-                style="padding:16px;border-radius:var(--radius-md);background:var(--priority-max-soft);border:1px solid rgba(239,68,68,0.15);">
-                <div
-                  style="font-size:0.68rem;font-weight:800;color:var(--priority-max);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">
-                  ⚓ Prioridade Máxima (Âncora)</div>
+              <div style="padding:16px;border-radius:var(--radius-md);background:var(--priority-max-soft);border:1px solid rgba(239,68,68,0.15);">
+                <div style="font-size:0.68rem;font-weight:800;color:var(--priority-max);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">⚓ Prioridade Máxima (Âncora)</div>
                 <div style="font-size:0.85rem;color:var(--text-primary);">Biologia</div>
                 <div style="font-size:0.85rem;color:var(--text-primary);">Química</div>
                 <div style="font-size:0.85rem;color:var(--text-primary);">Física</div>
               </div>
-              <div
-                style="padding:16px;border-radius:var(--radius-md);background:var(--priority-high-soft);border:1px solid rgba(245,158,11,0.15);">
-                <div
-                  style="font-size:0.68rem;font-weight:800;color:var(--priority-high);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">
-                  📘 Prioridade Alta (Apoio)</div>
+              <div style="padding:16px;border-radius:var(--radius-md);background:var(--priority-high-soft);border:1px solid rgba(245,158,11,0.15);">
+                <div style="font-size:0.68rem;font-weight:800;color:var(--priority-high);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">📘 Prioridade Alta (Apoio)</div>
                 <div style="font-size:0.85rem;color:var(--text-primary);">Matemática</div>
               </div>
-              <div
-                style="padding:16px;border-radius:var(--radius-md);background:var(--priority-mid-soft);border:1px solid rgba(59,130,246,0.15);">
-                <div
-                  style="font-size:0.68rem;font-weight:800;color:var(--priority-mid);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">
-                  🔄 Prioridade Média (Rotativa)</div>
+              <div style="padding:16px;border-radius:var(--radius-md);background:var(--priority-mid-soft);border:1px solid rgba(59,130,246,0.15);">
+                <div style="font-size:0.68rem;font-weight:800;color:var(--priority-mid);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">🔄 Prioridade Média (Rotativa)</div>
                 <div style="font-size:0.85rem;color:var(--text-primary);">História</div>
                 <div style="font-size:0.85rem;color:var(--text-primary);">Geografia</div>
                 <div style="font-size:0.85rem;color:var(--text-primary);">Língua Estrangeira</div>
               </div>
-              <div
-                style="padding:16px;border-radius:var(--radius-md);background:var(--priority-parallel-soft);border:1px solid rgba(139,92,246,0.15);">
-                <div
-                  style="font-size:0.68rem;font-weight:800;color:var(--priority-parallel);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">
-                  🟣 Paralelo Fixo</div>
+              <div style="padding:16px;border-radius:var(--radius-md);background:var(--priority-parallel-soft);border:1px solid rgba(139,92,246,0.15);">
+                <div style="font-size:0.68rem;font-weight:800;color:var(--priority-parallel);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">🟣 Paralelo Fixo</div>
                 <div style="font-size:0.85rem;color:var(--text-primary);">Português por questões</div>
                 <div style="font-size:0.85rem;color:var(--text-primary);">Discursiva diária</div>
               </div>
             </div>
           </div>
+
         </div>
 
         <!-- ===== SECTION: WEEKLY ===== -->
