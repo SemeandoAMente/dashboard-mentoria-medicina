@@ -21,7 +21,7 @@ const WEEKS_DATA = [
     week: 1, out: 'ling', phase: 'Construção de Base',
     blocks: [
       { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Genética molecular I', role: 'ancora' }, { id: 'mat', topic: 'Funções I', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Estequiometria I', role: 'ancora' }, { id: 'hist', topic: 'Brasil Colônia I', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Estrutura Atômica + Tabela Periódica', role: 'ancora' }, { id: 'hist', topic: 'Brasil Colônia I', role: 'apoio' }] },
       { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Mecânica I', role: 'ancora' }, { id: 'geo', topic: 'Geografia física I', role: 'apoio' }] },
     ]
   },
@@ -29,7 +29,7 @@ const WEEKS_DATA = [
     week: 2, out: 'geo', phase: 'Construção de Base',
     blocks: [
       { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Genética molecular II', role: 'ancora' }, { id: 'mat', topic: 'Funções II', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Estequiometria II', role: 'ancora' }, { id: 'hist', topic: 'Brasil Império', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Funções Inorgânicas', role: 'ancora' }, { id: 'hist', topic: 'Brasil Império', role: 'apoio' }] },
       { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Mecânica II', role: 'ancora' }, { id: 'ling', topic: 'Leitura I', role: 'apoio' }] },
     ]
   },
@@ -37,23 +37,23 @@ const WEEKS_DATA = [
     week: 3, out: 'hist', phase: 'Construção de Base',
     blocks: [
       { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Mendelismo', role: 'ancora' }, { id: 'mat', topic: 'Álgebra e equações', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Soluções', role: 'ancora' }, { id: 'geo', topic: 'Espaço brasileiro I', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Estequiometria + Soluções', role: 'ancora' }, { id: 'geo', topic: 'Espaço brasileiro I', role: 'apoio' }] },
       { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Termologia I', role: 'ancora' }, { id: 'ling', topic: 'Leitura II', role: 'apoio' }] },
     ]
   },
   {
     week: 4, out: 'ling', phase: 'Aprofundamento',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Célula I', role: 'ancora' }, { id: 'mat', topic: 'Probabilidade e combinatória', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Célula I', role: 'ancora' }, { id: 'mat', topic: 'Estatística + Interpretação de Dados', role: 'apoio' }] },
       { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Equilíbrio químico I', role: 'ancora' }, { id: 'hist', topic: 'República Velha e Era Vargas', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Termologia II / Fluidos', role: 'ancora' }, { id: 'geo', topic: 'Geografia física II', role: 'apoio' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Termologia II / Fluidos', role: 'ancora' }, { id: 'geo', topic: 'Geografia física II + Cartografia', role: 'apoio' }] },
     ]
   },
   {
     week: 5, out: 'geo', phase: 'Aprofundamento',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Célula II', role: 'ancora' }, { id: 'mat', topic: 'Sequências + revisão prática prob./comb.', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Equilíbrio químico II', role: 'ancora' }, { id: 'hist', topic: 'Mundo contemporâneo I', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Célula II', role: 'ancora' }, { id: 'mat', topic: 'Probabilidade + Combinatória + PA/PG + Juros', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Equilíbrio Químico II + Termoquímica', role: 'ancora' }, { id: 'hist', topic: 'Mundo contemporâneo I + Antiguidade', role: 'apoio' }] },
       { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Ondulatória I', role: 'ancora' }, { id: 'ling', topic: 'Leitura III', role: 'apoio' }] },
     ]
   },
@@ -61,8 +61,8 @@ const WEEKS_DATA = [
     week: 6, out: 'hist', phase: 'Aprofundamento',
     blocks: [
       { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Funções vitais I (dig./resp./circ./excr.)', role: 'ancora' }, { id: 'mat', topic: 'Geom. plana / trig. I', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Química orgânica I', role: 'ancora' }, { id: 'geo', topic: 'Espaço brasileiro II', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Óptica', role: 'ancora' }, { id: 'ling', topic: 'Leitura IV', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Química orgânica I', role: 'ancora' }, { id: 'geo', topic: 'Meio Ambiente + Sustentabilidade', role: 'apoio' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Óptica', role: 'ancora' }, { id: 'ling', topic: 'Gramática Inglesa + Vocabulário', role: 'apoio' }] },
     ]
   },
   {
@@ -70,23 +70,23 @@ const WEEKS_DATA = [
     blocks: [
       { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Funções vitais II (nerv./endócr./reprod.)', role: 'ancora' }, { id: 'mat', topic: 'Geometria espacial', role: 'apoio' }] },
       { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Química orgânica II', role: 'ancora' }, { id: 'hist', topic: 'Mundo contemporâneo II', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Eletricidade I', role: 'ancora' }, { id: 'geo', topic: 'Geopolítica', role: 'apoio' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Eletricidade I', role: 'ancora' }, { id: 'geo', topic: 'Espaço brasileiro II + Geopolítica', role: 'apoio' }] },
     ]
   },
   {
     week: 8, out: 'geo', phase: 'Consolidação',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Ecologia', role: 'ancora' }, { id: 'mat', topic: 'Geometria analítica', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Termoquímica / cinética', role: 'ancora' }, { id: 'hist', topic: 'Revisão 80/20 História', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Eletricidade II', role: 'ancora' }, { id: 'ling', topic: 'Revisão por questões', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Vírus / Imunidade / Parasitoses', role: 'ancora' }, { id: 'mat', topic: 'Geometria analítica', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Eletroquímica', role: 'ancora' }, { id: 'hist', topic: 'Revisão 80/20 História', role: 'apoio' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Eletricidade II + Eletromagnetismo + Física Moderna', role: 'ancora' }, { id: 'ling', topic: 'Revisão por questões', role: 'apoio' }] },
     ]
   },
   {
     week: 9, out: 'hist', phase: 'Revisão',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Evolução', role: 'ancora' }, { id: 'mat', topic: 'Revisão 80/20 Mat.', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Eletroquímica', role: 'ancora' }, { id: 'geo', topic: 'Revisão 80/20 Geo.', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Magnetismo + revisão', role: 'ancora' }, { id: 'ling', topic: 'Revisão por questões', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Botânica/Zoologia + Ecologia + Evolução', role: 'ancora' }, { id: 'mat', topic: 'Revisão 80/20 Mat.', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Revisão 80/20 Quím.', role: 'ancora' }, { id: 'geo', topic: 'Revisão 80/20 Geo.', role: 'apoio' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Revisão integrada Física', role: 'ancora' }, { id: 'ling', topic: 'Revisão por questões', role: 'apoio' }] },
     ]
   },
   {
@@ -130,6 +130,7 @@ const TOPICOS_POR_MATERIA = {
   'Funções vitais II (nerv./endócr./reprod.)': ['sistema nervoso', 'sistema endócrino', 'reprodução humana', 'gametogênese', 'fecundação', 'embriologia básica'],
   'Ecologia': ['cadeias alimentares', 'ciclos biogeoquímicos', 'relações ecológicas', 'biomas', 'impacto ambiental', 'sucessão ecológica'],
   'Evolução': ['teorias evolutivas', 'seleção natural', 'especiação', 'evidências da evolução', 'adaptação'],
+  'Botânica/Zoologia + Ecologia + Evolução': ['botânica (raiz, caule, folha, flor, fruto)', 'fisiologia vegetal e fotossíntese', 'zoologia: vertebrados e invertebrados', 'cadeias alimentares', 'ciclos biogeoquímicos', 'relações ecológicas', 'biomas brasileiros', 'teorias evolutivas', 'seleção natural', 'especiação'],
 
   // === QUÍMICA ===
   'Estequiometria I': ['reação química', 'equação química', 'balanceamento', 'mol', 'massa molar'],
@@ -152,6 +153,7 @@ const TOPICOS_POR_MATERIA = {
   'Eletricidade I': ['carga elétrica', 'campo elétrico', 'potencial elétrico', 'corrente elétrica', 'resistência'],
   'Eletricidade II': ['circuitos elétricos', 'potência elétrica', 'associação de resistores', 'capacitores'],
   'Magnetismo + revisão': ['campo magnético', 'força magnética', 'indução eletromagnética', 'revisão integrada'],
+  'Eletricidade II + Eletromagnetismo + Física Moderna': ['circuitos elétricos', 'potência elétrica', 'associação de resistores', 'capacitores', 'campo magnético', 'força magnética', 'indução eletromagnética', 'radioatividade', 'fissão e fusão nuclear', 'meia-vida', 'efeito fotoelétrico'],
 
   // === MATEMÁTICA ===
   'Funções I': ['conjuntos', 'conjuntos numéricos', 'função do 1º grau', 'função do 2º grau'],
@@ -159,6 +161,7 @@ const TOPICOS_POR_MATERIA = {
   'Álgebra e equações': ['equações', 'inequações', 'sistemas', 'álgebra fundamental'],
   'Probabilidade e combinatória': ['análise combinatória', 'probabilidade', 'arranjo', 'permutação', 'combinação'],
   'Sequências + revisão prática prob./comb.': ['PA', 'PG', 'juros simples', 'juros compostos', 'revisão de probabilidade'],
+  'Probabilidade + Combinatória + PA/PG + Juros': ['análise combinatória', 'probabilidade', 'arranjo', 'permutação', 'combinação', 'PA e PG', 'juros simples', 'juros compostos', 'porcentagem e descontos'],
   'Geom. plana / trig. I': ['geometria plana', 'trigonometria no triângulo retângulo', 'círculo trigonométrico'],
   'Geometria espacial': ['prismas', 'pirâmides', 'cilindro', 'cone', 'esfera', 'volume e área'],
   'Geometria analítica': ['ponto', 'reta', 'circunferência', 'distância entre pontos', 'equação da reta'],
@@ -168,6 +171,7 @@ const TOPICOS_POR_MATERIA = {
   'Brasil Império': ['independência', 'primeiro reinado', 'regências', 'segundo reinado', 'abolição'],
   'República Velha e Era Vargas': ['República Velha', 'coronelismo', 'Era Vargas', 'Estado Novo', 'industrialização'],
   'Mundo contemporâneo I': ['Revolução Francesa', 'Revolução Industrial', 'imperialismo', '1ª Guerra Mundial'],
+  'Mundo contemporâneo I + Antiguidade': ['Revolução Francesa', 'Revolução Industrial', 'imperialismo', '1ª Guerra Mundial', 'Antiguidade Clássica (Grécia e Roma)', 'Medievalidade e feudalismo', 'Cruzadas', 'Renascimento e Reforma Protestante'],
   'Mundo contemporâneo II': ['2ª Guerra Mundial', 'Guerra Fria', 'descolonização', 'globalização'],
   'Revisão 80/20 História': ['temas de maior incidência', 'questões recorrentes', 'revisão dirigida'],
 
@@ -184,6 +188,7 @@ const TOPICOS_POR_MATERIA = {
   'Leitura II': ['intenção comunicativa', 'gêneros textuais', 'elementos coesivos'],
   'Leitura III': ['interpretação avançada', 'argumentação', 'ponto de vista do autor'],
   'Leitura IV': ['aspectos gramaticais voltados para leitura', 'tempos verbais em contexto', 'conectivos'],
+  'Gramática Inglesa + Vocabulário': ['tempos verbais (present, past, future)', 'conditional e modal verbs', 'passive voice', 'relative clauses', 'phrasal verbs', 'vocabulário contextual', 'sinônimos e antônimos', 'expressões idiomáticas'],
 
   // === SEMANAS DE REVISÃO (10-12) ===
   'Revisão forte': ['revisão dos conteúdos de maior incidência', 'resolução intensiva de questões', 'correção de erros recorrentes'],

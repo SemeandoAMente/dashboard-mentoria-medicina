@@ -24,6 +24,14 @@
 - Banner para definir data de início do cronograma
 - Semana atual calculada automaticamente pela data de início
 - Pasta atualização/ no .gitignore
+- **[2026-03-14] Análise de 980 questões STRIX feita (analisar_strix.py + strix_resultado.txt)**
+- **[2026-03-14] 5 ajustes críticos aplicados no cronograma (WEEKS_DATA em app.js):**
+  1. Semana 5 Bio: adicionado **Botânica/Zoologia** junto com Ecologia + Evolução (19% das questões de Bio)
+  2. Semana 8 Física: adicionado **Física Moderna/Radioatividade** (meia-vida, fissão, fusão, efeito fotoelétrico)
+  3. Semana 5 Mat: adicionado **Juros/Porcentagem** explicitamente junto com PA/PG
+  4. Semana 5 Hist: adicionado **Antiguidade/Medievalidade** junto com Mundo Contemporâneo I
+  5. Semana 6 Ling: substituído "Leitura IV" por **Gramática Inglesa + Vocabulário** (46% das questões de LE)
+  - Também adicionadas entradas correspondentes em TOPICOS_POR_MATERIA para todos os novos tópicos
 
 ## Regras importantes
 - Sempre que fizer mudança: git add, commit e push origin main
