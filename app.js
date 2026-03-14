@@ -544,6 +544,7 @@ function navigateTo(section) {
     'weekly': 'Visão Semanal',
     'subjects': 'Progresso por Matéria',
     'weekprogress': 'Progresso por Semana',
+    'estrategia': 'Estratégia 80/20',
     'rotation': 'Campo de Rotação',
     'mentora': 'Visão do Mentor',
   };
@@ -554,6 +555,7 @@ function navigateTo(section) {
   if (section === 'weekly') renderWeeklyView();
   if (section === 'subjects') renderSubjectsView();
   if (section === 'weekprogress') renderWeekProgressView();
+  if (section === 'estrategia') renderEstrategiaView();
   if (section === 'rotation') renderRotationView();
   if (section === 'mentora') {
     refreshMentoraView();
@@ -1040,6 +1042,142 @@ function renderWeekProgressView() {
 
     container.appendChild(card);
   });
+}
+
+// ---------- Estratégia 80/20 View ----------
+function renderEstrategiaView() {
+  const container = document.getElementById('estrategia-container');
+  if (!container) return;
+
+  const EDITAL = [
+    { id: 'bio',  name: 'Biologia',           color: 'var(--bio-color)',  obj: 8,  disc: 3 },
+    { id: 'port', name: 'Português',           color: 'var(--port-color)', obj: 8,  disc: 0 },
+    { id: 'quim', name: 'Química',             color: 'var(--quim-color)', obj: 6,  disc: 1 },
+    { id: 'fis',  name: 'Física',              color: 'var(--fis-color)',  obj: 4,  disc: 1 },
+    { id: 'mat',  name: 'Matemática',          color: 'var(--mat-color)',  obj: 4,  disc: 0 },
+    { id: 'ling', name: 'Língua Estrangeira',  color: 'var(--ling-color)', obj: 4,  disc: 0 },
+    { id: 'hist', name: 'História',            color: 'var(--hist-color)', obj: 3,  disc: 0 },
+    { id: 'geo',  name: 'Geografia',           color: 'var(--geo-color)',  obj: 3,  disc: 0 },
+  ];
+
+  const STRIX = [
+    { id: 'bio',  name: 'Biologia',          color: 'var(--bio-color)',  total: 256, pct: 26.1,
+      topics: [['Biologia Molecular/Biotecnologia', 59], ['Fisiologia Humana', 57], ['Célula/Citologia', 28], ['Genética/Hereditariedade', 22], ['Botânica/Zoologia', 19], ['Ecologia', 16], ['Microbiologia', 15], ['Evolução', 10]] },
+    { id: 'quim', name: 'Química',           color: 'var(--quim-color)', total: 212, pct: 21.6,
+      topics: [['Estrutura Atômica/Ligações', 84], ['Funções Inorgânicas', 70], ['Química Orgânica', 54], ['Soluções/Equilíbrio', 26], ['Estequiometria', 23], ['Eletroquímica', 21], ['Termoquímica/Cinética', 11]] },
+    { id: 'fis',  name: 'Física',            color: 'var(--fis-color)',  total: 104, pct: 10.6,
+      topics: [['Mecânica', 60], ['Ondas/Óptica', 33], ['Termologia', 21], ['Fluidos/Pressão', 21], ['Eletricidade', 15], ['Eletromagnetismo', 4], ['Física Moderna', 0]] },
+    { id: 'geo',  name: 'Geografia',         color: 'var(--geo-color)',  total: 82,  pct: 8.4,
+      topics: [['Clima/Vegetação/Relevo', 71], ['Urbanização/População', 46], ['Meio Ambiente', 46], ['Brasil: Espaço e Economia', 37], ['Geopolítica/Globalização', 27], ['Cartografia', 20], ['Geologia/Geomorfologia', 15]] },
+    { id: 'ling', name: 'Língua Estrangeira', color: 'var(--ling-color)', total: 70, pct: 7.1,
+      topics: [['Interpretação (Inglês)', 100], ['Gramática Inglesa', 46], ['Vocabulário', 37], ['Espanhol', 3]] },
+    { id: 'hist', name: 'História',          color: 'var(--hist-color)', total: 54,  pct: 5.5,
+      topics: [['Brasil Republicano/Vargas', 56], ['Brasil Colonial/Imperial', 44], ['2ª Guerra/Guerra Fria', 37], ['Revoluções Modernas', 33], ['Mundo Contemporâneo', 15], ['Antiguidade/Medievalidade', 15], ['1ª Guerra Mundial', 7]] },
+    { id: 'port', name: 'Português',         color: 'var(--port-color)', total: 42,  pct: 4.3,
+      topics: [['Gramática', 86], ['Interpretação/Leitura', 67], ['Literatura', 33], ['Figuras de Linguagem', 19], ['Sociolinguística', 10]] },
+    { id: 'mat',  name: 'Matemática',        color: 'var(--mat-color)',  total: 34,  pct: 3.5,
+      topics: [['Geometria', 35], ['Álgebra/Equações', 35], ['Funções', 29], ['Probabilidade/Estatística', 18], ['Análise Combinatória', 6], ['Geometria Analítica', 6]] },
+  ];
+
+  const objTotal = EDITAL.reduce((s, e) => s + e.obj, 0);
+  const discTotal = EDITAL.reduce((s, e) => s + e.disc, 0);
+
+  // ── Edital table ──
+  let editalRows = EDITAL.map(e => {
+    const discCell = e.disc > 0
+      ? `<td style="text-align:center;font-weight:700;color:var(--priority-parallel);">${e.disc}</td>`
+      : `<td style="text-align:center;color:var(--text-muted);">—</td>`;
+    return `
+      <tr>
+        <td>
+          <span style="display:inline-flex;align-items:center;gap:8px;">
+            <span style="width:10px;height:10px;border-radius:50%;background:${e.color};display:inline-block;flex-shrink:0;"></span>
+            <strong>${e.name}</strong>
+          </span>
+        </td>
+        <td style="text-align:center;">
+          <span style="font-weight:700;font-size:1rem;color:${e.color};">${e.obj}</span>
+          <span style="font-size:0.7rem;color:var(--text-muted);margin-left:2px;">q</span>
+        </td>
+        ${discCell}
+      </tr>`;
+  }).join('');
+
+  // ── STRIX cards ──
+  let strixCards = STRIX.map(s => {
+    const topicsHtml = s.topics.map(([name, pct]) => {
+      const barW = Math.round(pct);
+      const opacity = pct === 0 ? '0.35' : '1';
+      return `
+        <div style="margin-bottom:7px;opacity:${opacity};">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;">
+            <span style="font-size:0.75rem;color:var(--text-secondary);">${name}</span>
+            <span style="font-size:0.72rem;font-weight:700;color:${s.color};">${pct}%</span>
+          </div>
+          <div style="height:5px;background:var(--bg-tertiary);border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:${barW}%;background:${s.color};border-radius:3px;transition:width 0.4s;"></div>
+          </div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="estrat-subject-card">
+        <div class="estrat-card-header">
+          <span style="width:12px;height:12px;border-radius:50%;background:${s.color};display:inline-block;flex-shrink:0;"></span>
+          <span style="font-weight:800;font-size:0.9rem;color:var(--text-heading);">${s.name}</span>
+          <span style="margin-left:auto;font-size:0.72rem;font-weight:700;color:var(--text-muted);">${s.total} q · ${s.pct}%</span>
+        </div>
+        <div style="margin-top:10px;">${topicsHtml}</div>
+      </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <!-- Intro explicativo -->
+    <div class="estrat-intro">
+      <div style="font-size:1.5rem;margin-bottom:8px;">🎯</div>
+      <h3 style="font-size:1rem;font-weight:800;color:var(--text-heading);margin-bottom:8px;">Cronograma baseado em dados reais</h3>
+      <p style="font-size:0.83rem;color:var(--text-secondary);line-height:1.6;">
+        O cronograma de 13 semanas foi construído a partir da análise de <strong>980 questões reais da UNIT</strong> aplicadas em vestibulares anteriores. Cada semana respeita a <strong>Técnica Espelho</strong> (Seg↔Qui, Ter↔Sex, Qua↔Sáb), o tempo humano de construção de conhecimento e a <strong>Hierarquia 80/20</strong>: Bio, Quím e Fís recebem mais semanas e mais revisão porque são as matérias que mais aparecem na prova — e as que têm discursiva. Os tópicos de maior incidência entram primeiro no cronograma; os de baixa incidência são abordados de forma mais leve ou apenas nas semanas de revisão.
+      </p>
+    </div>
+
+    <!-- Edital Oficial -->
+    <div class="card mt-24">
+      <div class="card-header">
+        <div class="card-title">📋 Edital UNIT — Distribuição de Questões</div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="estrat-table">
+          <thead>
+            <tr>
+              <th>Matéria</th>
+              <th style="text-align:center;">Objetiva</th>
+              <th style="text-align:center;">Discursiva</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${editalRows}
+            <tr class="estrat-table-total">
+              <td><strong>Total</strong></td>
+              <td style="text-align:center;"><strong>${objTotal}</strong></td>
+              <td style="text-align:center;"><strong>${discTotal}</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.72rem;color:var(--text-muted);margin-top:10px;padding:0 4px;">* Português inclui Literatura. Discursivas somente para matérias âncora (Bio, Quím, Fís).</p>
+    </div>
+
+    <!-- STRIX Analysis -->
+    <div class="card mt-24">
+      <div class="card-header">
+        <div class="card-title">📊 O que mais cai — Análise de 980 questões STRIX</div>
+        <div class="card-subtitle">Frequência de tópicos por matéria nas provas anteriores</div>
+      </div>
+      <div class="estrat-subjects-grid">
+        ${strixCards}
+      </div>
+    </div>`;
 }
 
 // ---------- Rotation View ----------

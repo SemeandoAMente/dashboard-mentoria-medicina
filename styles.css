@@ -1481,6 +1481,106 @@ body {
 
 /* ---------- Execution Status ---------- */
 
+/* ---------- Nav Agent Buttons ---------- */
+.nav-agent-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  margin: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.nav-agent-btn:hover {
+  background: var(--accent-primary-soft);
+  color: var(--accent-secondary);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.nav-agent-arrow {
+  margin-left: auto;
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+/* ---------- Estratégia 80/20 View ---------- */
+.estrat-intro {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 4px;
+}
+
+.estrat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.estrat-table th {
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.estrat-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: var(--text-primary);
+}
+
+.estrat-table tbody tr:hover td {
+  background: var(--bg-secondary);
+}
+
+.estrat-table-total td {
+  border-top: 2px solid var(--border-color);
+  border-bottom: none;
+  font-weight: 700;
+  color: var(--text-heading);
+  padding-top: 13px;
+}
+
+.estrat-subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.estrat-subject-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  transition: border-color var(--transition-fast);
+}
+
+.estrat-subject-card:hover {
+  border-color: var(--border-hover);
+}
+
+.estrat-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
 /* ---------- Mobile Sidebar Toggle ---------- */
 .mobile-toggle {
   display: none;
