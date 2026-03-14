@@ -4,7 +4,7 @@
    ============================================ */
 
 // ==========================================
-// DATA: 12 Weeks Schedule (exactly as defined)
+// DATA: 13 Weeks Schedule (expanded with 80/20 adjustments)
 // ==========================================
 const ALL_SUBJECTS = [
   { id: 'bio', name: 'Biologia', color: 'var(--bio-color)', pillClass: 'pill-bio', priority: 'maxima', priorityLabel: 'Máxima', type: 'ancora', typeLabel: 'Âncora', sensitive: true },
@@ -17,11 +17,12 @@ const ALL_SUBJECTS = [
 ];
 
 const WEEKS_DATA = [
+  // ── FASE 1: CONSTRUÇÃO DE BASE (Sem. 1–4) ──────────────────────────────
   {
     week: 1, out: 'ling', phase: 'Construção de Base',
     blocks: [
       { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Genética molecular I', role: 'ancora' }, { id: 'mat', topic: 'Funções I', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Estrutura Atômica + Tabela Periódica', role: 'ancora' }, { id: 'hist', topic: 'Brasil Colônia I', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Estrutura Atômica I', role: 'ancora' }, { id: 'hist', topic: 'Brasil Colônia I', role: 'apoio' }] },
       { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Mecânica I', role: 'ancora' }, { id: 'geo', topic: 'Geografia física I', role: 'apoio' }] },
     ]
   },
@@ -29,88 +30,99 @@ const WEEKS_DATA = [
     week: 2, out: 'geo', phase: 'Construção de Base',
     blocks: [
       { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Genética molecular II', role: 'ancora' }, { id: 'mat', topic: 'Funções II', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Funções Inorgânicas', role: 'ancora' }, { id: 'hist', topic: 'Brasil Império', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Estrutura Atômica II (Ligações Químicas)', role: 'ancora' }, { id: 'hist', topic: 'Brasil Império', role: 'apoio' }] },
       { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Mecânica II', role: 'ancora' }, { id: 'ling', topic: 'Leitura I', role: 'apoio' }] },
     ]
   },
   {
     week: 3, out: 'hist', phase: 'Construção de Base',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Mendelismo', role: 'ancora' }, { id: 'mat', topic: 'Álgebra e equações', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Estequiometria + Soluções', role: 'ancora' }, { id: 'geo', topic: 'Espaço brasileiro I', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Mendelismo', role: 'ancora' }, { id: 'mat', topic: 'Álgebra I (equações + sistemas)', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Funções Inorgânicas', role: 'ancora' }, { id: 'geo', topic: 'Espaço brasileiro I', role: 'apoio' }] },
       { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Termologia I', role: 'ancora' }, { id: 'ling', topic: 'Leitura II', role: 'apoio' }] },
     ]
   },
   {
-    week: 4, out: 'ling', phase: 'Aprofundamento',
+    week: 4, out: 'ling', phase: 'Construção de Base',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Célula I', role: 'ancora' }, { id: 'mat', topic: 'Estatística + Interpretação de Dados', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Equilíbrio químico I', role: 'ancora' }, { id: 'hist', topic: 'República Velha e Era Vargas', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Célula I', role: 'ancora' }, { id: 'mat', topic: 'Álgebra II (logaritmo + exponencial)', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Estequiometria', role: 'ancora' }, { id: 'hist', topic: 'República Velha e Era Vargas', role: 'apoio' }] },
       { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Termologia II / Fluidos', role: 'ancora' }, { id: 'geo', topic: 'Geografia física II + Cartografia', role: 'apoio' }] },
     ]
   },
+  // ── FASE 2: APROFUNDAMENTO (Sem. 5–8) ──────────────────────────────────
   {
     week: 5, out: 'geo', phase: 'Aprofundamento',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Célula II', role: 'ancora' }, { id: 'mat', topic: 'Probabilidade + Combinatória + PA/PG + Juros', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Equilíbrio Químico II + Termoquímica', role: 'ancora' }, { id: 'hist', topic: 'Mundo contemporâneo I + Antiguidade', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Célula II', role: 'ancora' }, { id: 'mat', topic: 'Estatística + Interpretação de Dados', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Soluções + Equilíbrio Químico I', role: 'ancora' }, { id: 'hist', topic: 'Revoluções Modernas', role: 'apoio' }] },
       { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Ondulatória I', role: 'ancora' }, { id: 'ling', topic: 'Leitura III', role: 'apoio' }] },
     ]
   },
   {
     week: 6, out: 'hist', phase: 'Aprofundamento',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Funções vitais I (dig./resp./circ./excr.)', role: 'ancora' }, { id: 'mat', topic: 'Geom. plana / trig. I', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Química orgânica I', role: 'ancora' }, { id: 'geo', topic: 'Meio Ambiente + Sustentabilidade', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Funções vitais I (dig./resp./circ./excr.)', role: 'ancora' }, { id: 'mat', topic: 'Probabilidade + Combinatória + PA/PG + Juros', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Equilíbrio Químico II + Termoquímica', role: 'ancora' }, { id: 'geo', topic: 'Meio Ambiente + Sustentabilidade', role: 'apoio' }] },
       { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Óptica', role: 'ancora' }, { id: 'ling', topic: 'Gramática Inglesa + Vocabulário', role: 'apoio' }] },
     ]
   },
   {
-    week: 7, out: 'ling', phase: 'Consolidação',
+    week: 7, out: 'ling', phase: 'Aprofundamento',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Funções vitais II (nerv./endócr./reprod.)', role: 'ancora' }, { id: 'mat', topic: 'Geometria espacial', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Química orgânica II', role: 'ancora' }, { id: 'hist', topic: 'Mundo contemporâneo II', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Funções vitais II (nerv./endócr./reprod.)', role: 'ancora' }, { id: 'mat', topic: 'Geom. plana / trig. I', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Química orgânica I', role: 'ancora' }, { id: 'hist', topic: 'Mundo Contemporâneo I (1ª Guerra + contexto)', role: 'apoio' }] },
       { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Eletricidade I', role: 'ancora' }, { id: 'geo', topic: 'Espaço brasileiro II + Geopolítica', role: 'apoio' }] },
     ]
   },
   {
-    week: 8, out: 'geo', phase: 'Consolidação',
+    week: 8, out: 'geo', phase: 'Aprofundamento',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Vírus / Imunidade / Parasitoses', role: 'ancora' }, { id: 'mat', topic: 'Geometria analítica', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Eletroquímica', role: 'ancora' }, { id: 'hist', topic: 'Revisão 80/20 História', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Eletricidade II + Eletromagnetismo + Física Moderna', role: 'ancora' }, { id: 'ling', topic: 'Revisão por questões', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Vírus / Imunidade / Parasitoses', role: 'ancora' }, { id: 'mat', topic: 'Geometria espacial', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Química orgânica II', role: 'ancora' }, { id: 'hist', topic: 'Mundo Contemporâneo II (2ª Guerra + Guerra Fria)', role: 'apoio' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Eletricidade II + Eletromagnetismo', role: 'ancora' }, { id: 'ling', topic: 'Revisão por questões', role: 'apoio' }] },
+    ]
+  },
+  // ── FASE 3: CONSOLIDAÇÃO (Sem. 9–10) ───────────────────────────────────
+  {
+    week: 9, out: 'hist', phase: 'Consolidação',
+    blocks: [
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Botânica/Zoologia + Ecologia', role: 'ancora' }, { id: 'mat', topic: 'Geometria analítica', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Eletroquímica', role: 'ancora' }, { id: 'geo', topic: 'Revisão 80/20 Geo.', role: 'apoio' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Física Moderna', role: 'ancora' }, { id: 'ling', topic: 'Leitura e questões', role: 'apoio' }] },
     ]
   },
   {
-    week: 9, out: 'hist', phase: 'Revisão',
+    week: 10, out: 'ling', phase: 'Consolidação',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Botânica/Zoologia + Ecologia + Evolução', role: 'ancora' }, { id: 'mat', topic: 'Revisão 80/20 Mat.', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Revisão 80/20 Quím.', role: 'ancora' }, { id: 'geo', topic: 'Revisão 80/20 Geo.', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Revisão integrada Física', role: 'ancora' }, { id: 'ling', topic: 'Revisão por questões', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Evolução', role: 'ancora' }, { id: 'mat', topic: 'Revisão 80/20 Mat.', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Revisão 80/20 Quím.', role: 'ancora' }, { id: 'hist', topic: 'Antiguidade + Revisão 80/20 Hist.', role: 'apoio' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Revisão integrada Física', role: 'ancora' }, { id: 'geo', topic: 'Revisão por questões', role: 'apoio' }] },
     ]
   },
+  // ── FASE 4: REVISÃO (Sem. 11–13) ───────────────────────────────────────
   {
-    week: 10, out: 'ling', phase: 'Revisão Forte',
+    week: 11, out: 'geo', phase: 'Revisão Forte',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Revisão forte', role: 'ancora' }, { id: 'mat', topic: 'Revisão forte', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Revisão forte', role: 'ancora' }, { id: 'mat', topic: 'Questões focadas', role: 'apoio' }] },
       { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Revisão forte', role: 'ancora' }, { id: 'hist', topic: 'Revisão por questões', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Revisão forte', role: 'ancora' }, { id: 'geo', topic: 'Revisão por questões', role: 'apoio' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Revisão forte', role: 'ancora' }, { id: 'ling', topic: 'Revisão por questões', role: 'apoio' }] },
     ]
   },
   {
-    week: 11, out: 'geo', phase: 'Questões Intensivas',
+    week: 12, out: 'hist', phase: 'Questões Intensivas',
     blocks: [
       { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Questões + disc. avançada', role: 'ancora' }, { id: 'mat', topic: 'Questões focadas', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Questões + disc. avançada', role: 'ancora' }, { id: 'hist', topic: 'Questões focadas', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Questões + disc. avançada', role: 'ancora' }, { id: 'ling', topic: 'Leitura e questões', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Questões + disc. avançada', role: 'ancora' }, { id: 'geo', topic: 'Revisão por questões', role: 'apoio' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Questões + disc. avançada', role: 'ancora' }, { id: 'ling', topic: 'Questões de inglês', role: 'apoio' }] },
     ]
   },
   {
-    week: 12, out: 'hist', phase: 'Revisão Final',
+    week: 13, out: 'ling', phase: 'Revisão Final',
     blocks: [
       { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Revisão final', role: 'ancora' }, { id: 'mat', topic: 'Revisão final', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Revisão final', role: 'ancora' }, { id: 'geo', topic: 'Revisão final', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Revisão final', role: 'ancora' }, { id: 'ling', topic: 'Revisão final', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Revisão final', role: 'ancora' }, { id: 'hist', topic: 'Revisão final', role: 'apoio' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Revisão final', role: 'ancora' }, { id: 'geo', topic: 'Revisão final', role: 'apoio' }] },
     ]
   },
 ];
@@ -128,20 +140,29 @@ const TOPICOS_POR_MATERIA = {
   'Célula II': ['componentes químicos', 'núcleo', 'mitose', 'meiose'],
   'Funções vitais I (dig./resp./circ./excr.)': ['digestão', 'respiração', 'circulação', 'excreção'],
   'Funções vitais II (nerv./endócr./reprod.)': ['sistema nervoso', 'sistema endócrino', 'reprodução humana', 'gametogênese', 'fecundação', 'embriologia básica'],
+  'Vírus / Imunidade / Parasitoses': ['vírus: estrutura e ciclo viral', 'bactérias patogênicas', 'sistema imune inato e adaptativo', 'vacinas e anticorpos', 'protozoários e helmintos', 'microbiologia aplicada'],
+  'Botânica/Zoologia + Ecologia': ['botânica (raiz, caule, folha, flor, fruto)', 'fisiologia vegetal e fotossíntese', 'zoologia: vertebrados e invertebrados', 'cadeias alimentares', 'ciclos biogeoquímicos', 'relações ecológicas', 'biomas brasileiros'],
+  'Botânica/Zoologia + Ecologia + Evolução': ['botânica (raiz, caule, folha, flor, fruto)', 'fisiologia vegetal e fotossíntese', 'zoologia: vertebrados e invertebrados', 'cadeias alimentares', 'ciclos biogeoquímicos', 'relações ecológicas', 'biomas brasileiros', 'teorias evolutivas', 'seleção natural', 'especiação'],
   'Ecologia': ['cadeias alimentares', 'ciclos biogeoquímicos', 'relações ecológicas', 'biomas', 'impacto ambiental', 'sucessão ecológica'],
   'Evolução': ['teorias evolutivas', 'seleção natural', 'especiação', 'evidências da evolução', 'adaptação'],
-  'Botânica/Zoologia + Ecologia + Evolução': ['botânica (raiz, caule, folha, flor, fruto)', 'fisiologia vegetal e fotossíntese', 'zoologia: vertebrados e invertebrados', 'cadeias alimentares', 'ciclos biogeoquímicos', 'relações ecológicas', 'biomas brasileiros', 'teorias evolutivas', 'seleção natural', 'especiação'],
 
   // === QUÍMICA ===
+  'Estrutura Atômica I': ['modelos atômicos', 'prótons, nêutrons e elétrons', 'número atômico e de massa', 'tabela periódica', 'configuração eletrônica', 'distribuição eletrônica'],
+  'Estrutura Atômica II (Ligações Químicas)': ['ligação iônica', 'ligação covalente', 'ligação metálica', 'polaridade de ligações', 'geometria molecular', 'VSEPR', 'forças intermoleculares'],
+  'Funções Inorgânicas': ['ácidos', 'bases', 'sais', 'óxidos', 'nomenclatura', 'propriedades', 'reações de neutralização'],
   'Estequiometria I': ['reação química', 'equação química', 'balanceamento', 'mol', 'massa molar'],
   'Estequiometria II': ['leis ponderais', 'leis volumétricas', 'cálculo estequiométrico', 'reagente limitante'],
+  'Estequiometria': ['reação e equação química', 'balanceamento', 'mol e massa molar', 'leis ponderais', 'cálculo estequiométrico', 'reagente limitante'],
   'Soluções': ['soluto', 'solvente', 'concentração', 'diluição', 'mistura de soluções'],
+  'Soluções + Equilíbrio Químico I': ['soluto e solvente', 'concentração e diluição', 'constante de equilíbrio Kc', 'Le Chatelier', 'equilíbrio iônico'],
   'Equilíbrio químico I': ['constante de equilíbrio', 'Le Chatelier', 'equilíbrio iônico'],
+  'Equilíbrio Químico II + Termoquímica': ['pH', 'pOH', 'solução tampão', 'produto de solubilidade', 'entalpia', 'lei de Hess', 'energia de ativação', 'fatores cinéticos'],
   'Equilíbrio químico II': ['pH', 'pOH', 'solução tampão', 'produto de solubilidade'],
   'Química orgânica I': ['carbono', 'cadeias carbônicas', 'funções orgânicas', 'nomenclatura'],
   'Química orgânica II': ['isomeria', 'reações orgânicas', 'produtos naturais', 'petróleo'],
   'Termoquímica / cinética': ['entalpia', 'lei de Hess', 'energia de ativação', 'fatores cinéticos', 'velocidade de reação'],
   'Eletroquímica': ['pilhas', 'eletrólise', 'potencial de redução', 'equação de Nernst'],
+  'Revisão 80/20 Quím.': ['temas de maior incidência', 'questões recorrentes', 'revisão dirigida'],
 
   // === FÍSICA ===
   'Mecânica I': ['cinemática', 'vetores', 'força', 'leis de Newton'],
@@ -152,13 +173,19 @@ const TOPICOS_POR_MATERIA = {
   'Óptica': ['espelhos', 'lentes', 'instrumentos ópticos', 'reflexão da luz', 'refração da luz'],
   'Eletricidade I': ['carga elétrica', 'campo elétrico', 'potencial elétrico', 'corrente elétrica', 'resistência'],
   'Eletricidade II': ['circuitos elétricos', 'potência elétrica', 'associação de resistores', 'capacitores'],
+  'Eletricidade II + Eletromagnetismo': ['circuitos elétricos', 'potência elétrica', 'associação de resistores', 'capacitores', 'campo magnético', 'força magnética', 'indução eletromagnética', 'lei de Faraday'],
+  'Física Moderna': ['radioatividade', 'fissão e fusão nuclear', 'meia-vida', 'efeito fotoelétrico', 'dualidade onda-partícula', 'modelo atômico de Bohr'],
   'Magnetismo + revisão': ['campo magnético', 'força magnética', 'indução eletromagnética', 'revisão integrada'],
   'Eletricidade II + Eletromagnetismo + Física Moderna': ['circuitos elétricos', 'potência elétrica', 'associação de resistores', 'capacitores', 'campo magnético', 'força magnética', 'indução eletromagnética', 'radioatividade', 'fissão e fusão nuclear', 'meia-vida', 'efeito fotoelétrico'],
+  'Revisão integrada Física': ['revisão mecânica', 'revisão termologia e fluidos', 'revisão eletricidade', 'eletromagnetismo e física moderna', 'questões integradas'],
 
   // === MATEMÁTICA ===
   'Funções I': ['conjuntos', 'conjuntos numéricos', 'função do 1º grau', 'função do 2º grau'],
   'Funções II': ['função modular', 'função exponencial', 'função logarítmica', 'gráficos'],
   'Álgebra e equações': ['equações', 'inequações', 'sistemas', 'álgebra fundamental'],
+  'Álgebra I (equações + sistemas)': ['equações do 1º e 2º grau', 'inequações', 'sistemas lineares', 'substituição e adição'],
+  'Álgebra II (logaritmo + exponencial)': ['logaritmos: propriedades e cálculo', 'equações logarítmicas', 'equações exponenciais', 'aplicações práticas'],
+  'Estatística + Interpretação de Dados': ['média, moda e mediana', 'desvio padrão', 'gráficos e tabelas', 'interpretação de dados estatísticos'],
   'Probabilidade e combinatória': ['análise combinatória', 'probabilidade', 'arranjo', 'permutação', 'combinação'],
   'Sequências + revisão prática prob./comb.': ['PA', 'PG', 'juros simples', 'juros compostos', 'revisão de probabilidade'],
   'Probabilidade + Combinatória + PA/PG + Juros': ['análise combinatória', 'probabilidade', 'arranjo', 'permutação', 'combinação', 'PA e PG', 'juros simples', 'juros compostos', 'porcentagem e descontos'],
@@ -170,6 +197,10 @@ const TOPICOS_POR_MATERIA = {
   'Brasil Colônia I': ['economia colonial', 'escravidão', 'administração colonial', 'sociedade colonial'],
   'Brasil Império': ['independência', 'primeiro reinado', 'regências', 'segundo reinado', 'abolição'],
   'República Velha e Era Vargas': ['República Velha', 'coronelismo', 'Era Vargas', 'Estado Novo', 'industrialização'],
+  'Revoluções Modernas': ['Revolução Francesa', 'Revolução Industrial', 'imperialismo', 'colonialismo', 'iluminismo'],
+  'Mundo Contemporâneo I (1ª Guerra + contexto)': ['1ª Guerra Mundial: causas e consequências', 'Revolução Russa', 'crise de 1929', 'ascensão do nazifascismo', 'entreguerras'],
+  'Mundo Contemporâneo II (2ª Guerra + Guerra Fria)': ['2ª Guerra Mundial', 'Holocausto', 'Guerra Fria', 'ONU e ordem bipolar', 'descolonização africana e asiática'],
+  'Antiguidade + Revisão 80/20 Hist.': ['Antiguidade Clássica: Grécia e Roma', 'Medievalidade e feudalismo', 'Cruzadas', 'Renascimento e Reforma Protestante', 'revisão 80/20 dos temas de maior incidência'],
   'Mundo contemporâneo I': ['Revolução Francesa', 'Revolução Industrial', 'imperialismo', '1ª Guerra Mundial'],
   'Mundo contemporâneo I + Antiguidade': ['Revolução Francesa', 'Revolução Industrial', 'imperialismo', '1ª Guerra Mundial', 'Antiguidade Clássica (Grécia e Roma)', 'Medievalidade e feudalismo', 'Cruzadas', 'Renascimento e Reforma Protestante'],
   'Mundo contemporâneo II': ['2ª Guerra Mundial', 'Guerra Fria', 'descolonização', 'globalização'],
@@ -178,8 +209,11 @@ const TOPICOS_POR_MATERIA = {
   // === GEOGRAFIA ===
   'Geografia física I': ['relevo', 'clima', 'vegetação', 'hidrografia'],
   'Geografia física II': ['solo', 'recursos naturais', 'meio ambiente', 'impactos ambientais'],
+  'Geografia física II + Cartografia': ['solo', 'recursos naturais', 'meio ambiente', 'impactos ambientais', 'cartografia: escalas e projeções', 'leitura de mapas e gráficos'],
   'Espaço brasileiro I': ['população', 'urbanização', 'migração', 'regiões brasileiras'],
   'Espaço brasileiro II': ['economia brasileira', 'industrialização', 'agropecuária', 'infraestrutura'],
+  'Espaço brasileiro II + Geopolítica': ['economia brasileira', 'industrialização', 'agropecuária', 'infraestrutura', 'ordem mundial', 'blocos econômicos', 'conflitos regionais', 'organizações internacionais'],
+  'Meio Ambiente + Sustentabilidade': ['aquecimento global', 'desmatamento', 'biodiversidade', 'desenvolvimento sustentável', 'impactos ambientais', 'COP e acordos internacionais'],
   'Geopolítica': ['ordem mundial', 'blocos econômicos', 'conflitos', 'organizações internacionais'],
   'Revisão 80/20 Geo.': ['temas de maior incidência', 'questões recorrentes', 'revisão dirigida'],
 
@@ -189,10 +223,11 @@ const TOPICOS_POR_MATERIA = {
   'Leitura III': ['interpretação avançada', 'argumentação', 'ponto de vista do autor'],
   'Leitura IV': ['aspectos gramaticais voltados para leitura', 'tempos verbais em contexto', 'conectivos'],
   'Gramática Inglesa + Vocabulário': ['tempos verbais (present, past, future)', 'conditional e modal verbs', 'passive voice', 'relative clauses', 'phrasal verbs', 'vocabulário contextual', 'sinônimos e antônimos', 'expressões idiomáticas'],
-
-  // === SEMANAS DE REVISÃO (10-12) ===
-  'Revisão forte': ['revisão dos conteúdos de maior incidência', 'resolução intensiva de questões', 'correção de erros recorrentes'],
+  'Questões de inglês': ['interpretação de texto em inglês', 'questões de vestibular', 'vocabulário e gramática em contexto', 'simulado de inglês'],
   'Revisão por questões': ['questões por tópico', 'simulados parciais', 'análise de erros'],
+
+  // === SEMANAS DE REVISÃO (11-13) ===
+  'Revisão forte': ['revisão dos conteúdos de maior incidência', 'resolução intensiva de questões', 'correção de erros recorrentes'],
   'Questões + disc. avançada': ['questões de nível avançado', 'discursivas complexas', 'treino de tempo'],
   'Questões focadas': ['questões dos temas mais cobrados', 'revisão ativa', 'resolução comentada'],
   'Leitura e questões': ['leitura e interpretação', 'questões de vestibular', 'prática contextual'],
@@ -304,10 +339,6 @@ if (!appState.rotation) appState.rotation = {};
 if (!appState.exec) appState.exec = {};
 if (!appState.mentoriaNota) appState.mentoriaNota = {};
 if (!appState.dayActivity) appState.dayActivity = {};
-if (!appState.mentoriaNota['w9']) {
-  appState.mentoriaNota['w9'] = 'Saúde entra apenas por questões, revisão curta ou aprendizado reverso.';
-  saveState(appState);
-}
 
 function toggleCheck(weekNum, dayKey, itemKey) {
   const key = `w${weekNum}_${dayKey}_${itemKey}`;
@@ -484,7 +515,7 @@ function getCurrentWeek() {
   const now = new Date();
   const diffDays = Math.floor((now - start) / (1000 * 60 * 60 * 24));
   const week = Math.floor(diffDays / 7) + 1;
-  return Math.max(1, Math.min(12, week));
+  return Math.max(1, Math.min(13, week));
 }
 
 // ==========================================
@@ -550,7 +581,7 @@ function renderOverview() {
       <div class="es-label">Semana atual</div>
     </div>
     <div class="exec-summary-item">
-      <div class="es-value">12</div>
+      <div class="es-value">13</div>
       <div class="es-label">Total semanas</div>
     </div>
     <div class="exec-summary-item">
