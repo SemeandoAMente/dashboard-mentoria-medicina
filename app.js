@@ -449,38 +449,39 @@ function calcOverallProgress() {
   return Math.round(sum / 12);
 }
 
+// Block index → days of week (mirrors)
+const BLOCK_DAYS = [['seg', 'qui'], ['ter', 'sex'], ['qua', 'sab']];
+
 function calcSubjectProgress(subjectId) {
-  let totalWeeks = 0, completedWeeks = 0;
+  let totalSlots = 0, doneSlots = 0;
   WEEKS_DATA.forEach(w => {
-    const outSub = getWeekOutSubject(w);
-    if (outSub === subjectId) return;
-    let found = false;
-    w.blocks.forEach(b => { b.subjects.forEach(s => { if (s.id === subjectId) found = true; }); });
-    if (found) {
-      totalWeeks++;
-      if (calcWeekProgress(w.week) >= 80) completedWeeks++;
-    }
+    if (getWeekOutSubject(w) === subjectId) return;
+    w.blocks.forEach((b, bIdx) => {
+      if (!b.subjects.some(s => s.id === subjectId)) return;
+      BLOCK_DAYS[bIdx].forEach(dayKey => {
+        totalSlots++;
+        if (isExecDone(w.week, dayKey, 'construcao')) doneSlots++;
+      });
+    });
   });
-  return totalWeeks > 0 ? Math.round((completedWeeks / totalWeeks) * 100) : 0;
+  return totalSlots > 0 ? Math.round((doneSlots / totalSlots) * 100) : 0;
 }
 
 function getSubjectStatus(subjectId) {
-  let hasAnyCheck = false, allComplete = true, totalWeeks = 0;
+  let totalSlots = 0, doneSlots = 0;
   WEEKS_DATA.forEach(w => {
-    const outSub = getWeekOutSubject(w);
-    if (outSub === subjectId) return;
-    let found = false;
-    w.blocks.forEach(b => { b.subjects.forEach(s => { if (s.id === subjectId) found = true; }); });
-    if (found) {
-      totalWeeks++;
-      const wp = calcWeekProgress(w.week);
-      if (wp > 0) hasAnyCheck = true;
-      if (wp < 100) allComplete = false;
-    }
+    if (getWeekOutSubject(w) === subjectId) return;
+    w.blocks.forEach((b, bIdx) => {
+      if (!b.subjects.some(s => s.id === subjectId)) return;
+      BLOCK_DAYS[bIdx].forEach(dayKey => {
+        totalSlots++;
+        if (isExecDone(w.week, dayKey, 'construcao')) doneSlots++;
+      });
+    });
   });
-  if (totalWeeks === 0) return 'nao-iniciado';
-  if (allComplete) return 'concluido';
-  if (hasAnyCheck) return 'em-andamento';
+  if (totalSlots === 0) return 'nao-iniciado';
+  if (doneSlots === totalSlots) return 'concluido';
+  if (doneSlots > 0) return 'em-andamento';
   return 'nao-iniciado';
 }
 
@@ -1164,6 +1165,10 @@ function renderExecutionView() {
   container.innerHTML = '';
 
   const legendHtml = `
+    <div style="margin-bottom:12px;padding:8px 14px;background:var(--bg-tertiary);border-radius:8px;border:1px solid var(--border-color);display:flex;align-items:center;gap:8px;">
+      <span style="font-size:0.75rem;color:var(--text-muted);">🔒</span>
+      <span style="font-size:0.75rem;color:var(--text-muted);font-style:italic;">Somente leitura — acompanhamento do mentor. Marque seu progresso em <strong style="font-style:normal;">Progresso por Semana</strong>.</span>
+    </div>
     <div class="exec-legend">
       <div class="exec-legend-item">
         <span class="exec-legend-icon" style="background:var(--accent-primary-soft);color:var(--accent-secondary);border-color:rgba(99,102,241,0.2);">C</span> Construção
@@ -1236,8 +1241,7 @@ function renderExecutionView() {
         indicators += `
           <div class="exec-indicator ${done ? 'done' : ''}"
                title="${typeTitles[t]}"
-               style="${style}"
-               onclick="handleExecToggle(${w.week},'${day.key}','${t}',this)">
+               style="${style}cursor:default;pointer-events:none;">
             ${done ? '✓' : typeLabels[t]}
           </div>`;
       });
