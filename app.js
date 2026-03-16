@@ -533,7 +533,7 @@ function calcWeekProgress(weekNum) {
 function calcOverallProgress() {
   let sum = 0;
   WEEKS_DATA.forEach(w => { sum += calcWeekProgress(w.week); });
-  return Math.round(sum / 12);
+  return Math.round(sum / WEEKS_DATA.length);
 }
 
 // Block index → days of week (mirrors)
@@ -799,6 +799,19 @@ function renderWeeklyView() {
 
     container.appendChild(card);
   });
+
+  // Auto-expand the current week
+  const currentW = getCurrentWeek();
+  const currentDailyView = document.getElementById(`daily-view-${currentW}`);
+  const currentCard = document.getElementById(`week-card-${currentW}`);
+  if (currentDailyView && currentCard) {
+    currentDailyView.classList.add('expanded');
+    currentDailyView.innerHTML = renderDailyCards(WEEKS_DATA[currentW - 1]);
+    const btn = currentCard.querySelector('.week-expand-btn');
+    if (btn) btn.innerHTML = 'Fechar ▴';
+    // Scroll to current week
+    setTimeout(() => currentCard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  }
 }
 
 function toggleDailyView(weekNum) {
@@ -1360,7 +1373,7 @@ function renderRotationView() {
       </div>
 
       <div class="rotation-info">
-        <span>ℹ️</span>
+        <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
         <div>
           A rotação permite ajustar qual matéria fica de fora a cada semana. O cronograma original
           já rotaciona apenas as matérias de <strong>prioridade média</strong> (História, Geografia, L. Estrangeira).
