@@ -1,0 +1,17 @@
+Base oficial do projeto:
+C:\Users\Grilo\OneDrive\Área de Trabalho\dashboard-mentoria
+
+Arquivo principal:
+C:\Users\Grilo\OneDrive\Área de Trabalho\dashboard-mentoria\app.js
+
+Documentação do projeto:
+C:\Users\Grilo\OneDrive\Área de Trabalho\dashboard-mentoria\docs
+
+Consultar antes de qualquer alteração:
+- 00_INDEX_GERAL.md
+- 02_ARQUITETURA.md
+- 03_BUGS_CONHECIDOS.md
+- 05_RELATORIO_ULTIMA_CORRECAO.md
+
+Não mexer na pasta paralela sem autorização:
+C:\Users\Grilo\OneDrive\Área de Trabalho\dashboard-mentoria\atualização
