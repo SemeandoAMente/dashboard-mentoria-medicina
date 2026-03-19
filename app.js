@@ -377,6 +377,11 @@ async function syncFromFirebase() {
     else if (cloudUpdated > localUpdated) {
       appState = cloudData;
       if (!appState.checks) appState.checks = {};
+      if (!appState.weekObs) appState.weekObs = {};
+      if (!appState.rotation) appState.rotation = {};
+      if (!appState.mentoriaNota) appState.mentoriaNota = {};
+      if (!appState.startDate) appState.startDate = '2026-03-16';
+
       didMigrate = migrateLegacyData(appState);
       delete appState.dayActivity;
       delete appState.exec;
@@ -835,16 +840,8 @@ function renderWeeklyView() {
     container.appendChild(card);
   });
 
-  // Auto-expand the current week
-  const currentW = getCurrentWeek();
-  const currentDailyView = document.getElementById(`daily-view-${currentW}`);
-  const currentCard = document.getElementById(`week-card-${currentW}`);
-  if (currentDailyView && currentCard) {
-    currentDailyView.classList.add('expanded');
-    currentDailyView.innerHTML = renderDailyCards(WEEKS_DATA[currentW - 1]);
-    const btn = currentCard.querySelector('.week-expand-btn');
-    if (btn) btn.innerHTML = 'Fechar ▴';
-  }
+  // Semana 1 (ou corrente) não expande mais por padrão. 
+  // O usuário as abre manualmente sob demanda.
 }
 
 function toggleDailyView(weekNum) {
@@ -1518,6 +1515,10 @@ async function refreshMentoraView() {
       if (cloudData) {
         appState = cloudData;
         if (!appState.checks) appState.checks = {};
+        if (!appState.weekObs) appState.weekObs = {};
+        if (!appState.rotation) appState.rotation = {};
+        if (!appState.mentoriaNota) appState.mentoriaNota = {};
+        if (!appState.startDate) appState.startDate = '2026-03-16';
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
       }
     }
