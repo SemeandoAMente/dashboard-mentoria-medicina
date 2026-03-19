@@ -274,6 +274,7 @@ function loadState() {
 }
 
 function saveState(state) {
+  state.lastUpdated = Date.now();
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (e) { /* ignore */ }
@@ -281,7 +282,8 @@ function saveState(state) {
   fetch(FIREBASE_URL, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(state)
+    body: JSON.stringify(state),
+    keepalive: true
   }).catch(() => { /* ignore network errors */ });
 }
 
@@ -336,40 +338,65 @@ function migrateLegacyData(cloudData) {
 
 async function syncFromFirebase() {
   try {
-    const res = await fetch(FIREBASE_URL);
+    const res = await fetch(FIREBASE_URL, { cache: 'no-store' });
     if (!res.ok) return;
     const cloudData = await res.json();
     if (cloudData === null) {
       // Firebase explicitamente vazio — novo usuário começa zerado
       appState.checks = {};
+      appState.lastUpdated = Date.now();
       localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
       if (typeof currentSection !== 'undefined') navigateTo(currentSection);
       return;
     }
 
-    // Migrate legacy data formats before merging
-    const didMigrate = migrateLegacyData(cloudData);
+    const localUpdated = appState.lastUpdated || 0;
+    const cloudUpdated = cloudData.lastUpdated || 0;
 
-    // Merge checks: true always wins (checked on any device stays checked)
-    if (cloudData.checks) {
-      Object.keys(cloudData.checks).forEach(key => {
-        appState.checks[key] = cloudData.checks[key] || appState.checks[key];
-      });
-    }
+    let didMigrate = false;
 
-    // Merge other fields (weekObs, rotation, mentoriaNota, alunaNota, startDate)
-    // Exclude legacy fields dayActivity and exec from being spread into appState
-    const { checks: _c, dayActivity: _da, exec: _ex, ...rest } = cloudData;
-    Object.assign(appState, rest);
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-
-    // If migration happened, push cleaned state back to Firebase
-    if (didMigrate) {
+    if (!cloudData.lastUpdated && !appState.lastUpdated) {
+      didMigrate = migrateLegacyData(cloudData);
+      if (cloudData.checks) {
+        Object.keys(cloudData.checks).forEach(key => {
+          appState.checks[key] = cloudData.checks[key] || appState.checks[key];
+        });
+      }
+      const { checks: _c, dayActivity: _da, exec: _ex, ...rest } = cloudData;
+      Object.assign(appState, rest);
+      
+      appState.lastUpdated = Date.now();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
       fetch(FIREBASE_URL, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(appState),
+        keepalive: true
+      }).catch(() => {});
+    } 
+    else if (cloudUpdated > localUpdated) {
+      appState = cloudData;
+      if (!appState.checks) appState.checks = {};
+      didMigrate = migrateLegacyData(appState);
+      delete appState.dayActivity;
+      delete appState.exec;
+      
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
+      if (didMigrate) {
+        fetch(FIREBASE_URL, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(appState),
+          keepalive: true
+        }).catch(() => {});
+      }
+    }
+    else if (localUpdated > cloudUpdated) {
+      fetch(FIREBASE_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(appState),
+        keepalive: true
       }).catch(() => {});
     }
 
@@ -639,7 +666,15 @@ function navigateTo(section) {
 
   // Render dynamic content
   if (section === 'overview') renderOverview();
-  if (section === 'weekly') renderWeeklyView();
+  if (section === 'weekly') {
+    renderWeeklyView();
+    // Scroll inicial apenas ao entrar na aba
+    setTimeout(() => {
+      const currentW = getCurrentWeek();
+      const currentCard = document.getElementById(`week-card-${currentW}`);
+      if (currentCard) currentCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
   if (section === 'subjects') renderSubjectsView();
   if (section === 'weekprogress') renderWeekProgressView();
   if (section === 'estrategia') renderEstrategiaView();
@@ -809,8 +844,6 @@ function renderWeeklyView() {
     currentDailyView.innerHTML = renderDailyCards(WEEKS_DATA[currentW - 1]);
     const btn = currentCard.querySelector('.week-expand-btn');
     if (btn) btn.innerHTML = 'Fechar ▴';
-    // Scroll to current week
-    setTimeout(() => currentCard.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
   }
 }
 
@@ -1479,15 +1512,12 @@ function renderMentoraView() {
 
 async function refreshMentoraView() {
   try {
-    const res = await fetch(FIREBASE_URL);
+    const res = await fetch(FIREBASE_URL, { cache: 'no-store' });
     if (res.ok) {
       const cloudData = await res.json();
-      if (cloudData && cloudData.checks) {
-        Object.keys(cloudData.checks).forEach(key => {
-          appState.checks[key] = cloudData.checks[key] || appState.checks[key];
-        });
-        const { checks: _c, ...rest } = cloudData;
-        Object.assign(appState, rest);
+      if (cloudData) {
+        appState = cloudData;
+        if (!appState.checks) appState.checks = {};
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
       }
     }
