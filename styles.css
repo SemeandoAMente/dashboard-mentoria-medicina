@@ -1991,18 +1991,18 @@ body {
 }
 .day-act-legend {
   display: grid;
-  grid-template-columns: 40px repeat(4, 32px);
+  grid-template-columns: 40px repeat(5, 32px);
   gap: 4px;
-  margin-bottom: 4px;
   font-size: 0.65rem;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--text-muted);
+  margin-bottom: 8px;
   text-transform: uppercase;
   text-align: center;
 }
 .day-act-row {
   display: grid;
-  grid-template-columns: 40px repeat(4, 32px);
+  grid-template-columns: 40px repeat(5, 32px);
   gap: 4px;
   margin-bottom: 4px;
   align-items: center;
