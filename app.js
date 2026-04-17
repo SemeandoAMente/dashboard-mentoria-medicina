@@ -278,13 +278,16 @@ function saveState(state) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (e) { /* ignore */ }
-  // Persist to Firebase in background (fire-and-forget)
+}
+
+function sendFirebasePatch(updates) {
+  updates['lastUpdated'] = Date.now();
   fetch(FIREBASE_URL, {
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(state),
+    body: JSON.stringify(updates),
     keepalive: true
-  }).catch(() => { /* ignore network errors */ });
+  }).catch(() => { /* ignore */ });
 }
 
 // Migrates legacy dayActivity (w1_seg_c) and exec (exec_w1_seg_construcao) fields
@@ -444,6 +447,7 @@ function toggleCheck(weekNum, dayKey, itemKey) {
   const key = `w${weekNum}_${dayKey}_${itemKey}`;
   appState.checks[key] = !appState.checks[key];
   saveState(appState);
+  sendFirebasePatch({ [`checks/${key}`]: appState.checks[key] });
   return appState.checks[key];
 }
 
@@ -483,10 +487,13 @@ function toggleExec(weekNum, dayKey, type) {
   const keys = EXEC_TO_CHECK_KEYS[type] || [type];
   const allDone = keys.every(k => isChecked(weekNum, dayKey, k));
   const newState = !allDone;
+  let updates = {};
   keys.forEach(k => {
     appState.checks[`w${weekNum}_${dayKey}_${k}`] = newState;
+    updates[`checks/w${weekNum}_${dayKey}_${k}`] = newState;
   });
   saveState(appState);
+  sendFirebasePatch(updates);
   return newState;
 }
 
@@ -502,6 +509,7 @@ function getWeekObs(weekNum) {
 function setWeekObs(weekNum, val) {
   appState.weekObs[`w${weekNum}`] = val;
   saveState(appState);
+  sendFirebasePatch({ [`weekObs/w${weekNum}`]: val });
 }
 
 function getRotation(weekNum) {
@@ -511,6 +519,7 @@ function getRotation(weekNum) {
 function setRotation(weekNum, subjectId) {
   appState.rotation[`w${weekNum}`] = subjectId;
   saveState(appState);
+  sendFirebasePatch({ [`rotation/w${weekNum}`]: subjectId });
 }
 
 function getMentoriaNota(weekNum) {
@@ -521,6 +530,7 @@ function setMentoriaNota(weekNum, val) {
   if (!appState.mentoriaNota) appState.mentoriaNota = {};
   appState.mentoriaNota[`w${weekNum}`] = val;
   saveState(appState);
+  sendFirebasePatch({ [`mentoriaNota/w${weekNum}`]: val });
 }
 
 function getAlunaNota(weekNum) {
@@ -531,6 +541,7 @@ function setAlunaNota(weekNum, val) {
   if (!appState.alunaNota) appState.alunaNota = {};
   appState.alunaNota[`w${weekNum}`] = val;
   saveState(appState);
+  sendFirebasePatch({ [`alunaNota/w${weekNum}`]: val });
 }
 
 function getSubjectById(id) {
@@ -1563,7 +1574,15 @@ function showSavedToast() {
 // ==========================================
 // AUTENTICAÇÃO E LOGIN
 // ==========================================
-function checkAuth() {
+async function hashPass(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function checkAuth() {
   const user = document.getElementById('auth-user')?.value.trim();
   const pass = document.getElementById('auth-pass')?.value;
   const errorEl = document.getElementById('auth-error');
@@ -1577,10 +1596,11 @@ function checkAuth() {
     }
   } else {
     // Validação ativa pelo clique/enter
-    if (user === 'camillaalicebarreto2021@gmail.com' && pass === '@Camilla127') {
+    const hashed = await hashPass(pass);
+    if (user === 'camillaalicebarreto2021@gmail.com' && hashed === 'fc5e006c8e72302ccff7a54fd562a8616bccd7a639e8cc3c64600c5e1add2c2f') {
       localStorage.setItem('auth_role', 'aluna');
       applyRole('aluna');
-    } else if (user === 'Falcao27' && pass === 'F@lcaodois7') {
+    } else if (user === 'Falcao27' && hashed === '404f609de0d9e1565ca5aec9f39160b65bf4bdbbce8b2ba7040b1da167fa80a0') {
       localStorage.setItem('auth_role', 'mentor');
       applyRole('mentor');
     } else {
