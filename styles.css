@@ -7,14 +7,14 @@
 
 /* ---------- CSS Variables ---------- */
 :root {
-  --bg-primary: #05070a;
-  --bg-secondary: rgba(12, 14, 23, 0.65);
-  --bg-card: rgba(17, 20, 35, 0.45);
-  --bg-card-hover: rgba(25, 30, 50, 0.55);
-  --bg-input: rgba(17, 20, 35, 0.50);
-  --bg-elevated: rgba(23, 27, 45, 0.60);
-  --border-color: rgba(255, 255, 255, 0.05);
-  --border-hover: rgba(255, 255, 255, 0.12);
+  --bg-primary: #0b0d14;
+  --bg-secondary: #111420;
+  --bg-card: #171b2d;
+  --bg-card-hover: #1e2340;
+  --bg-input: #171b2d;
+  --bg-elevated: #1d2238;
+  --border-color: #252a40;
+  --border-hover: #3a3f5c;
   --border-accent: #4f46e5;
 
   --text-primary: #ebeef2;
@@ -83,19 +83,12 @@ html {
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  background: var(--bg-primary) url('medical_bg.png') no-repeat center center fixed;
-  background-size: cover;
+  background: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.65;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Glassmorphism Global Helper */
-.card, .stat-card, .method-card, .week-card, .subject-card, .day-card, .estrat-subject-card, .calendar-section, .exec-summary, .mini-chart, .rotation-table-wrap, .week-progress-card {
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
 }
 
 /* ---------- Scrollbar ---------- */
@@ -128,8 +121,6 @@ body {
   width: 260px;
   background: var(--bg-secondary);
   border-right: 1px solid var(--border-color);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -257,9 +248,9 @@ body {
 .content-header {
   position: sticky;
   top: 0;
-  background: rgba(11, 13, 20, 0.45);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
+  background: rgba(11, 13, 20, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-color);
   padding: 14px 36px;
   display: flex;
