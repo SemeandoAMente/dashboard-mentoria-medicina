@@ -645,6 +645,11 @@ let currentSection = 'overview';
 let _mentoraInterval = null;
 
 function navigateTo(section) {
+  // Se for aluna, bloqueia o acesso à aba mentora
+  if (section === 'mentora' && localStorage.getItem('auth_role') === 'aluna') {
+    return;
+  }
+
   // Limpa auto-refresh ao sair da visão da mentora
   if (section !== 'mentora' && _mentoraInterval) {
     clearInterval(_mentoraInterval);
@@ -1074,8 +1079,8 @@ function renderSubjectsView() {
 }
 
 // ---------- Week Progress View ----------
-// Mapeamento dos botões C/Q/P/D → tipos do exec (mesma chave de appState.checks)
-const ACTIVITY_TO_EXEC = { c: 'construcao', q: 'questoes', p: 'portugues', d: 'discursiva' };
+// Mapeamento dos botões C/Q/P/D/A → tipos do exec (mesma chave de appState.checks)
+const ACTIVITY_TO_EXEC = { c: 'construcao', q: 'questoes', p: 'portugues', d: 'discursiva', a: 'acumulo' };
 
 function getDayActivity(week, dayKey, type) {
   return isExecDone(week, dayKey, ACTIVITY_TO_EXEC[type] || type);
@@ -1125,7 +1130,12 @@ function renderWeekProgressView() {
     ];
 
     const activityRowsHtml = ACTIVITY_DAYS.map(day => {
-      const btns = ACTIVITIES.map(act => {
+      let dayActs = [...ACTIVITIES];
+      if (day.key === 'seg') {
+        dayActs.push({ type: 'a', label: 'A', title: 'Acúmulo' });
+      }
+      
+      const btns = dayActs.map(act => {
         const active = getDayActivity(w.week, day.key, act.type);
         return `<button class="day-act-btn${active ? ' day-act-active' : ''}"
           title="${act.title}"
@@ -1164,6 +1174,7 @@ function renderWeekProgressView() {
           <span title="Questões">Q</span>
           <span title="Português">P</span>
           <span title="Discursiva">D</span>
+          <span title="Acúmulo (Seg)">A</span>
         </div>
         ${activityRowsHtml}
       </div>
@@ -1550,6 +1561,53 @@ function showSavedToast() {
 }
 
 // ==========================================
+// AUTENTICAÇÃO E LOGIN
+// ==========================================
+function checkAuth() {
+  const user = document.getElementById('auth-user')?.value.trim();
+  const pass = document.getElementById('auth-pass')?.value;
+  const errorEl = document.getElementById('auth-error');
+  
+  if (!user && !pass) {
+    // Tenta validar pelo localStorage inicial
+    const savedRole = localStorage.getItem('auth_role');
+    if (savedRole === 'aluna' || savedRole === 'mentor') {
+      applyRole(savedRole);
+      return;
+    }
+  } else {
+    // Validação ativa pelo clique/enter
+    if (user === 'camillaalicebarreto2021@gmail.com' && pass === '@Camilla127') {
+      localStorage.setItem('auth_role', 'aluna');
+      applyRole('aluna');
+    } else if (user === 'Falcao27' && pass === 'F@lcaodois7') {
+      localStorage.setItem('auth_role', 'mentor');
+      applyRole('mentor');
+    } else {
+      if (errorEl) {
+        errorEl.textContent = 'Credenciais inválidas. Tente novamente.';
+        errorEl.style.display = 'block';
+      }
+    }
+  }
+}
+
+function applyRole(role) {
+  const overlay = document.getElementById('auth-overlay');
+  if (overlay) overlay.style.display = 'none';
+
+  if (role === 'aluna') {
+    const navMentor = document.getElementById('nav-mentor');
+    const navLabelMentor = document.getElementById('nav-label-mentor');
+    if (navMentor) navMentor.style.display = 'none';
+    if (navLabelMentor) navLabelMentor.style.display = 'none';
+  }
+  
+  // Sync com o Firebase somente após logar com sucesso
+  syncFromFirebase();
+}
+
+// ==========================================
 // INITIALIZATION
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -1573,7 +1631,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   navigateTo('overview');
 
-  // Sync from Firebase on load
-  syncFromFirebase();
+  // Ao invés de carregar o Firebase de cara, checamos o estado da Autenticação
+  checkAuth();
 });
 

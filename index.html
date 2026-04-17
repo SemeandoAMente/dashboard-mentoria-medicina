@@ -11,6 +11,30 @@
 </head>
 
 <body>
+  <!-- AUTH OVERLAY -->
+  <div id="auth-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg-primary);z-index:10000;display:flex;align-items:center;justify-content:center;">
+    <div style="background:var(--bg-card);padding:32px;border-radius:16px;width:90%;max-width:360px;text-align:center;border:1px solid var(--border-color);box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+      <div style="display:flex;justify-content:center;margin-bottom:16px;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      </div>
+      <h2 style="margin-bottom:24px;font-weight:800;color:var(--text-heading);">Acesso à Mentoria</h2>
+      
+      <div style="margin-bottom:16px;text-align:left;">
+        <label style="display:block;font-size:0.8rem;color:var(--text-secondary);margin-bottom:6px;font-weight:600;">E-mail / Usuário</label>
+        <input type="text" id="auth-user" placeholder="camillaalicebarreto2021@gmail.com" onkeydown="if(event.key==='Enter') document.getElementById('auth-pass').focus()" autocomplete="username"
+          style="width:100%;padding:12px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-tertiary);color:var(--text-primary);font-size:0.95rem;outline:none;" />
+      </div>
+      <div style="margin-bottom:24px;text-align:left;">
+        <label style="display:block;font-size:0.8rem;color:var(--text-secondary);margin-bottom:6px;font-weight:600;">Senha</label>
+        <input type="password" id="auth-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter') checkAuth()" autocomplete="current-password"
+          style="width:100%;padding:12px;border-radius:8px;border:1px solid var(--border-color);background:var(--bg-tertiary);color:var(--text-primary);font-size:0.95rem;outline:none;" />
+      </div>
+      
+      <button onclick="checkAuth()" style="width:100%;padding:12px;border-radius:8px;background:var(--accent-primary);color:#fff;border:none;font-weight:700;font-size:1rem;cursor:pointer;transition:transform 0.1s;">Acessar Dashboard</button>
+      
+      <div id="auth-error" style="color:var(--priority-max);background:var(--priority-max-soft);padding:10px;border-radius:6px;margin-top:16px;font-size:0.85rem;display:none;font-weight:600;"></div>
+    </div>
+  </div>
 
   <!-- Mobile toggle -->
   <button class="mobile-toggle" aria-label="Menu">☰</button>
@@ -84,9 +108,9 @@
           Campo de Rotação
         </div>
 
-        <div class="nav-section-label">Mentoria</div>
+        <div class="nav-section-label" id="nav-label-mentor">Mentoria</div>
 
-        <div class="nav-item" data-section="mentora">
+        <div class="nav-item" data-section="mentora" id="nav-mentor">
           <span class="nav-icon">
             <!-- eye -->
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
