@@ -263,7 +263,17 @@ const DAYS_OF_WEEK = [
 // STATE MANAGEMENT — Firebase + localStorage fallback
 // ==========================================
 const STORAGE_KEY = 'mentoria_dashboard_v1';
-const FIREBASE_URL = 'https://mentoria-medicina-default-rtdb.firebaseio.com/state.json';
+const FIREBASE_BASE = 'https://mentoria-medicina-default-rtdb.firebaseio.com';
+const FIREBASE_API_KEY = 'AIzaSyDXYBjSQcI0oauqHU7AbhifqqsX31cT70I';
+
+function getFirebaseUrl() {
+  const uid = localStorage.getItem('firebase_uid');
+  const token = localStorage.getItem('firebase_id_token');
+  if (uid && token) {
+    return `${FIREBASE_BASE}/users/${uid}/state.json?auth=${token}`;
+  }
+  return null;
+}
 
 function loadState() {
   try {
@@ -282,7 +292,9 @@ function saveState(state) {
 
 function sendFirebasePatch(updates) {
   updates['lastUpdated'] = Date.now();
-  fetch(FIREBASE_URL, {
+  const url = getFirebaseUrl();
+  if (!url) return;
+  fetch(url, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updates),
@@ -345,7 +357,9 @@ function migrateLegacyData(cloudData) {
 
 async function syncFromFirebase() {
   try {
-    const res = await fetch(FIREBASE_URL, { cache: 'no-store' });
+    const url = getFirebaseUrl();
+    if (!url) return;
+    const res = await fetch(url, { cache: 'no-store' });
     if (!res.ok) return;
     const cloudData = await res.json();
     if (cloudData === null) {
@@ -1537,15 +1551,8 @@ function showSavedToast() {
 }
 
 // ==========================================
-// AUTENTICAÇÃO E LOGIN
+// AUTENTICAÇÃO E LOGIN (Firebase Identity)
 // ==========================================
-async function hashPass(password) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
 
 async function checkAuth() {
   const user = document.getElementById('auth-user')?.value.trim();
@@ -1555,24 +1562,44 @@ async function checkAuth() {
   if (!user && !pass) {
     // Tenta validar pelo localStorage inicial
     const savedRole = localStorage.getItem('auth_role');
-    if (savedRole === 'aluna' || savedRole === 'mentor') {
+    const token = localStorage.getItem('firebase_id_token');
+    if (savedRole && token) {
       applyRole(savedRole);
       return;
     }
   } else {
-    // Validação ativa pelo clique/enter
-    const hashed = await hashPass(pass);
-    if (user === 'camillaalicebarreto2021@gmail.com' && hashed === 'fc5e006c8e72302ccff7a54fd562a8616bccd7a639e8cc3c64600c5e1add2c2f') {
-      localStorage.setItem('auth_role', 'aluna');
-      applyRole('aluna');
-    } else if (user === 'Falcao27' && hashed === '404f609de0d9e1565ca5aec9f39160b65bf4bdbbce8b2ba7040b1da167fa80a0') {
-      localStorage.setItem('auth_role', 'mentor');
-      applyRole('mentor');
-    } else {
-      if (errorEl) {
-        errorEl.textContent = 'Credenciais inválidas. Tente novamente.';
-        errorEl.style.display = 'block';
+    // Adapter para o login antigo -> Formato e-mail obrigatório
+    let fbUser = user;
+    let expectedRole = 'aluna';
+    if (user.toLowerCase() === 'falcao27') {
+      fbUser = 'falcao27@mentoria.com';
+      expectedRole = 'mentor';
+    }
+
+    try {
+      const resp = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: fbUser, password: pass, returnSecureToken: true })
+      });
+      const data = await resp.json();
+      
+      if (data.error) {
+        if (errorEl) {
+          errorEl.textContent = 'Credenciais inválidas no sistema Firebase.';
+          errorEl.style.display = 'block';
+        }
+        console.error('Auth falhou:', data.error.message);
+        return;
       }
+      
+      localStorage.setItem('firebase_id_token', data.idToken);
+      localStorage.setItem('firebase_uid', data.localId);
+      localStorage.setItem('auth_role', expectedRole);
+      
+      applyRole(expectedRole);
+    } catch (err) {
+      console.error('Auth exception:', err);
     }
   }
 }
@@ -1594,6 +1621,8 @@ function applyRole(role) {
 
 function logout() {
   localStorage.removeItem('auth_role');
+  localStorage.removeItem('firebase_id_token');
+  localStorage.removeItem('firebase_uid');
   document.getElementById('auth-user').value = '';
   document.getElementById('auth-pass').value = '';
   const overlay = document.getElementById('auth-overlay');
