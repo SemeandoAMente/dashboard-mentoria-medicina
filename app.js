@@ -17,112 +17,47 @@ const ALL_SUBJECTS = [
 ];
 
 const WEEKS_DATA = [
-  // ── FASE 1: CONSTRUÇÃO DE BASE (Sem. 1–4) ──────────────────────────────
+  // ── FASE 1: CONSTRUÇÃO INTENSIVA (Sem. 1–2) ────────────────────────────
   {
-    week: 1, out: 'ling', phase: 'Construção de Base',
+    week: 1, out: 'ling', phase: 'Construção Intensiva',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Genética molecular I', role: 'ancora' }, { id: 'mat', topic: 'Funções I', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Estrutura Atômica I', role: 'ancora' }, { id: 'hist', topic: 'Brasil Colônia I', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Mecânica I', role: 'ancora' }, { id: 'geo', topic: 'Geografia física I', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Célula', role: 'ancora' }, { id: 'quim', topic: 'Estrutura Atômica e Ligações', role: 'ancora' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'bio', topic: 'Genética I — Molecular', role: 'ancora' }, { id: 'mat', topic: 'Funções', role: 'apoio' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Mecânica I', role: 'ancora' }, { id: 'hist', topic: 'Brasil Colonial e Republicano', role: 'apoio' }] },
     ]
   },
   {
-    week: 2, out: 'geo', phase: 'Construção de Base',
+    week: 2, out: 'hist', phase: 'Construção Intensiva',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Genética molecular II', role: 'ancora' }, { id: 'mat', topic: 'Funções II', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Estrutura Atômica II (Ligações Químicas)', role: 'ancora' }, { id: 'hist', topic: 'Brasil Império', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Mecânica II', role: 'ancora' }, { id: 'ling', topic: 'Leitura I', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Genética II — Mendelismo', role: 'ancora' }, { id: 'quim', topic: 'Funções Inorgânicas', role: 'ancora' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'bio', topic: 'Fisiologia I (dig./resp./circ./excr.)', role: 'ancora' }, { id: 'quim', topic: 'Estequiometria', role: 'ancora' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Mecânica II', role: 'ancora' }, { id: 'geo', topic: 'Geografia Física e Meio Ambiente', role: 'apoio' }] },
+    ]
+  },
+  // ── FASE 2: APROFUNDAMENTO (Sem. 3–4) ──────────────────────────────────
+  {
+    week: 3, out: 'mat', phase: 'Aprofundamento',
+    blocks: [
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Fisiologia II (nerv./endócr./reprod.)', role: 'ancora' }, { id: 'quim', topic: 'Soluções e Equilíbrio Químico', role: 'ancora' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'bio', topic: 'Biologia Molecular e Biotecnologia', role: 'ancora' }, { id: 'quim', topic: 'Química Orgânica I', role: 'ancora' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Termologia e Fluidos', role: 'ancora' }, { id: 'ling', topic: 'Leitura e Interpretação I', role: 'apoio' }] },
     ]
   },
   {
-    week: 3, out: 'hist', phase: 'Construção de Base',
+    week: 4, out: 'geo', phase: 'Aprofundamento',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Mendelismo', role: 'ancora' }, { id: 'mat', topic: 'Álgebra I (equações + sistemas)', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Funções Inorgânicas', role: 'ancora' }, { id: 'geo', topic: 'Espaço brasileiro I', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Termologia I', role: 'ancora' }, { id: 'ling', topic: 'Leitura II', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Ecologia e Evolução', role: 'ancora' }, { id: 'quim', topic: 'Química Orgânica II', role: 'ancora' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'bio', topic: 'Microbiologia e Saúde', role: 'ancora' }, { id: 'quim', topic: 'Termoquímica e Eletroquímica', role: 'ancora' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Óptica e Ondulatória', role: 'ancora' }, { id: 'mat', topic: 'Geometria e Probabilidade', role: 'apoio' }] },
     ]
   },
+  // ── FASE 3: REVISÃO TOTAL (Sem. 5) ─────────────────────────────────────
   {
-    week: 4, out: 'ling', phase: 'Construção de Base',
+    week: 5, out: 'ling', phase: 'Revisão Total',
     blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Célula I', role: 'ancora' }, { id: 'mat', topic: 'Álgebra II (logaritmo + exponencial)', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Estequiometria', role: 'ancora' }, { id: 'hist', topic: 'República Velha e Era Vargas', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Termologia II / Fluidos', role: 'ancora' }, { id: 'geo', topic: 'Geografia física II + Cartografia', role: 'apoio' }] },
-    ]
-  },
-  // ── FASE 2: APROFUNDAMENTO (Sem. 5–8) ──────────────────────────────────
-  {
-    week: 5, out: 'geo', phase: 'Aprofundamento',
-    blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Célula II', role: 'ancora' }, { id: 'mat', topic: 'Estatística + Interpretação de Dados', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Soluções + Equilíbrio Químico I', role: 'ancora' }, { id: 'hist', topic: 'Revoluções Modernas', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Ondulatória I', role: 'ancora' }, { id: 'ling', topic: 'Leitura III', role: 'apoio' }] },
-    ]
-  },
-  {
-    week: 6, out: 'hist', phase: 'Aprofundamento',
-    blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Funções vitais I (dig./resp./circ./excr.)', role: 'ancora' }, { id: 'mat', topic: 'Probabilidade + Combinatória + PA/PG + Juros', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Equilíbrio Químico II + Termoquímica', role: 'ancora' }, { id: 'geo', topic: 'Meio Ambiente + Sustentabilidade', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Óptica', role: 'ancora' }, { id: 'ling', topic: 'Gramática Inglesa + Vocabulário', role: 'apoio' }] },
-    ]
-  },
-  {
-    week: 7, out: 'ling', phase: 'Aprofundamento',
-    blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Funções vitais II (nerv./endócr./reprod.)', role: 'ancora' }, { id: 'mat', topic: 'Geom. plana / trig. I', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Química orgânica I', role: 'ancora' }, { id: 'hist', topic: 'Mundo Contemporâneo I (1ª Guerra + contexto)', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Eletricidade I', role: 'ancora' }, { id: 'geo', topic: 'Espaço brasileiro II + Geopolítica', role: 'apoio' }] },
-    ]
-  },
-  {
-    week: 8, out: 'geo', phase: 'Aprofundamento',
-    blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Vírus / Imunidade / Parasitoses', role: 'ancora' }, { id: 'mat', topic: 'Geometria espacial', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Química orgânica II', role: 'ancora' }, { id: 'hist', topic: 'Mundo Contemporâneo II (2ª Guerra + Guerra Fria)', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Eletricidade II + Eletromagnetismo', role: 'ancora' }, { id: 'ling', topic: 'Revisão por questões', role: 'apoio' }] },
-    ]
-  },
-  // ── FASE 3: CONSOLIDAÇÃO (Sem. 9–10) ───────────────────────────────────
-  {
-    week: 9, out: 'hist', phase: 'Consolidação',
-    blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Botânica/Zoologia + Ecologia', role: 'ancora' }, { id: 'mat', topic: 'Geometria analítica', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Eletroquímica', role: 'ancora' }, { id: 'geo', topic: 'Revisão 80/20 Geo.', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Física Moderna', role: 'ancora' }, { id: 'ling', topic: 'Leitura e questões', role: 'apoio' }] },
-    ]
-  },
-  {
-    week: 10, out: 'ling', phase: 'Consolidação',
-    blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Evolução', role: 'ancora' }, { id: 'mat', topic: 'Revisão 80/20 Mat.', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Revisão 80/20 Quím.', role: 'ancora' }, { id: 'hist', topic: 'Antiguidade + Revisão 80/20 Hist.', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Revisão integrada Física', role: 'ancora' }, { id: 'geo', topic: 'Revisão por questões', role: 'apoio' }] },
-    ]
-  },
-  // ── FASE 4: REVISÃO (Sem. 11–13) ───────────────────────────────────────
-  {
-    week: 11, out: 'geo', phase: 'Revisão Forte',
-    blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Revisão forte', role: 'ancora' }, { id: 'mat', topic: 'Questões focadas', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Revisão forte', role: 'ancora' }, { id: 'hist', topic: 'Revisão por questões', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Revisão forte', role: 'ancora' }, { id: 'ling', topic: 'Revisão por questões', role: 'apoio' }] },
-    ]
-  },
-  {
-    week: 12, out: 'hist', phase: 'Questões Intensivas',
-    blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Questões + disc. avançada', role: 'ancora' }, { id: 'mat', topic: 'Questões focadas', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Questões + disc. avançada', role: 'ancora' }, { id: 'geo', topic: 'Revisão por questões', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Questões + disc. avançada', role: 'ancora' }, { id: 'ling', topic: 'Questões de inglês', role: 'apoio' }] },
-    ]
-  },
-  {
-    week: 13, out: 'ling', phase: 'Revisão Final',
-    blocks: [
-      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Revisão final', role: 'ancora' }, { id: 'mat', topic: 'Revisão final', role: 'apoio' }] },
-      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Revisão final', role: 'ancora' }, { id: 'hist', topic: 'Revisão final', role: 'apoio' }] },
-      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Revisão final', role: 'ancora' }, { id: 'geo', topic: 'Revisão final', role: 'apoio' }] },
+      { mirror: 'Seg / Qui', discursiva: 'Biologia', subjects: [{ id: 'bio', topic: 'Revisão Biologia + Questões STRIX', role: 'ancora' }, { id: 'mat', topic: 'Revisão Rápida Matemática', role: 'apoio' }] },
+      { mirror: 'Ter / Sex', discursiva: 'Química', subjects: [{ id: 'quim', topic: 'Revisão Química + Questões STRIX', role: 'ancora' }, { id: 'hist', topic: 'Revisão 80/20 História', role: 'apoio' }] },
+      { mirror: 'Qua / Sáb', discursiva: 'Física', subjects: [{ id: 'fis', topic: 'Revisão Física + Simulado Completo', role: 'ancora' }, { id: 'geo', topic: 'Revisão 80/20 Geografia', role: 'apoio' }] },
     ]
   },
 ];
@@ -226,13 +161,48 @@ const TOPICOS_POR_MATERIA = {
   'Questões de inglês': ['interpretação de texto em inglês', 'questões de vestibular', 'vocabulário e gramática em contexto', 'simulado de inglês'],
   'Revisão por questões': ['questões por tópico', 'simulados parciais', 'análise de erros'],
 
-  // === SEMANAS DE REVISÃO (11-13) ===
+  // === SEMANAS DE REVISÃO ===
   'Revisão forte': ['revisão dos conteúdos de maior incidência', 'resolução intensiva de questões', 'correção de erros recorrentes'],
   'Questões + disc. avançada': ['questões de nível avançado', 'discursivas complexas', 'treino de tempo'],
   'Questões focadas': ['questões dos temas mais cobrados', 'revisão ativa', 'resolução comentada'],
   'Leitura e questões': ['leitura e interpretação', 'questões de vestibular', 'prática contextual'],
   'Revisão 80/20 Mat.': ['temas de maior incidência', 'questões recorrentes', 'revisão dirigida'],
   'Revisão final': ['revisão geral dos conteúdos principais', 'simulado', 'prova anterior', 'correção de erros'],
+
+  // === NOVOS TÓPICOS — PSUM 2026.2 ===
+  // BIOLOGIA
+  'Célula': ['procarionte e eucarionte', 'célula animal e vegetal', 'organelas e funções', 'componentes químicos', 'núcleo interfásico', 'mitose', 'meiose'],
+  'Genética I — Molecular': ['DNA', 'RNA', 'gene', 'alelo', 'genótipo x fenótipo', 'replicação', 'transcrição', 'tradução', 'código genético'],
+  'Genética II — Mendelismo': ['mendelismo', 'neomendelismo', 'cruzamentos', 'probabilidade genética', 'genes e cromossomos', 'crossing over', 'mutação', 'recombinação gênica'],
+  'Fisiologia I (dig./resp./circ./excr.)': ['digestão', 'respiração celular e pulmonar', 'circulação', 'excreção', 'trocas gasosas'],
+  'Fisiologia II (nerv./endócr./reprod.)': ['sistema nervoso', 'sistema endócrino', 'reprodução humana', 'gametogênese', 'fecundação', 'embriologia básica'],
+  'Biologia Molecular e Biotecnologia': ['PCR', 'eletroforese', 'transgênicos', 'clonagem', 'DNA recombinante', 'mapeamento genético', 'CRISPR básico'],
+  'Ecologia e Evolução': ['cadeias alimentares', 'ciclos biogeoquímicos', 'relações ecológicas', 'biomas brasileiros', 'sucessão ecológica', 'teorias evolutivas', 'seleção natural', 'especiação', 'evidências da evolução'],
+  'Microbiologia e Saúde': ['vírus: estrutura e ciclo viral', 'bactérias patogênicas', 'sistema imune inato e adaptativo', 'vacinas e anticorpos', 'protozoários e helmintos', 'principais endemias brasileiras'],
+  'Revisão Biologia + Questões STRIX': ['revisão Biologia Molecular', 'revisão Fisiologia', 'revisão Genética', 'revisão Célula', 'questões STRIX intensivas', 'discursiva avançada'],
+  // QUÍMICA
+  'Estrutura Atômica e Ligações': ['modelos atômicos', 'tabela periódica', 'configuração eletrônica', 'ligação iônica', 'ligação covalente', 'polaridade', 'geometria molecular', 'forças intermoleculares'],
+  'Soluções e Equilíbrio Químico': ['soluto e solvente', 'concentração e diluição', 'constante de equilíbrio Kc', 'Le Chatelier', 'equilíbrio iônico', 'pH', 'pOH', 'solução tampão', 'produto de solubilidade'],
+  'Termoquímica e Eletroquímica': ['entalpia', 'lei de Hess', 'energia de ativação', 'fatores cinéticos', 'pilhas', 'eletrólise', 'potencial de redução'],
+  'Química Orgânica I': ['carbono', 'cadeias carbônicas', 'funções orgânicas', 'nomenclatura'],
+  'Química Orgânica II': ['isomeria', 'reações orgânicas', 'produtos naturais', 'petróleo'],
+  'Revisão Química + Questões STRIX': ['revisão Estrutura Atômica', 'revisão Funções Inorgânicas', 'revisão Orgânica', 'revisão Equilíbrio', 'questões STRIX intensivas', 'discursiva avançada'],
+  // FÍSICA
+  'Termologia e Fluidos': ['temperatura', 'escalas termométricas', 'dilatação', 'calorimetria', 'mudanças de estado', 'calor latente', 'densidade', 'pressão', 'Stevin', 'Pascal', 'Arquimedes', 'gases ideais'],
+  'Óptica e Ondulatória': ['reflexão e refração', 'espelhos', 'lentes', 'instrumentos ópticos', 'ondas', 'frequência', 'comprimento de onda', 'superposição', 'difração'],
+  'Revisão Física + Simulado Completo': ['revisão Mecânica', 'revisão Termologia e Fluidos', 'revisão Óptica', 'simulado completo 5h', 'discursiva avançada'],
+  // MATEMÁTICA
+  'Funções': ['função do 1º grau', 'função do 2º grau', 'função modular', 'função exponencial', 'função logarítmica', 'gráficos', 'equações e inequações'],
+  'Geometria e Probabilidade': ['geometria plana', 'geometria espacial', 'análise combinatória', 'probabilidade', 'PA e PG', 'juros e porcentagem'],
+  'Revisão Rápida Matemática': ['geometria', 'funções', 'probabilidade', 'questões focadas'],
+  // HISTÓRIA
+  'Brasil Colonial e Republicano': ['economia colonial', 'escravidão', 'administração colonial', 'República Velha', 'coronelismo', 'Era Vargas', 'Estado Novo', 'redemocratização'],
+  'Revisão 80/20 História': ['Brasil Republicano e Vargas', 'Brasil Colonial e Imperial', '2ª Guerra e Guerra Fria', 'Revoluções Modernas', 'questões focadas'],
+  // GEOGRAFIA
+  'Geografia Física e Meio Ambiente': ['relevo', 'clima', 'vegetação', 'hidrografia', 'aquecimento global', 'desmatamento', 'biodiversidade', 'desenvolvimento sustentável'],
+  'Revisão 80/20 Geografia': ['clima e vegetação', 'urbanização e população', 'espaço brasileiro', 'meio ambiente', 'questões focadas'],
+  // LÍNGUA ESTRANGEIRA
+  'Leitura e Interpretação I': ['ideia central', 'cognatos', 'inferência', 'vocabulário contextual', 'intenção comunicativa', 'gêneros textuais'],
 };
 
 // ==========================================
@@ -386,7 +356,7 @@ async function syncFromFirebase() {
     if (!appState.rotation) appState.rotation = {};
     if (!appState.mentoriaNota) appState.mentoriaNota = {};
     if (!appState.alunaNota) appState.alunaNota = {};
-    if (!appState.startDate) appState.startDate = '2026-03-16';
+    if (!appState.startDate) appState.startDate = '2026-04-27';
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
 
@@ -423,7 +393,7 @@ if (!appState.checks) appState.checks = {};
 if (!appState.weekObs) appState.weekObs = {};
 if (!appState.rotation) appState.rotation = {};
 if (!appState.mentoriaNota) appState.mentoriaNota = {};
-if (!appState.startDate) appState.startDate = '2026-03-16';
+if (!appState.startDate) appState.startDate = '2026-04-27';
 
 function toggleCheck(weekNum, dayKey, itemKey) {
   const key = `w${weekNum}_${dayKey}_${itemKey}`;
@@ -637,7 +607,7 @@ function getCurrentWeek() {
   const now = new Date();
   const diffDays = Math.floor((now - start) / (1000 * 60 * 60 * 24));
   const week = Math.floor(diffDays / 7) + 1;
-  return Math.max(1, Math.min(13, week));
+  return Math.max(1, Math.min(5, week));
 }
 
 // ==========================================
