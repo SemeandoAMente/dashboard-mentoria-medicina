@@ -1506,7 +1506,7 @@ async function refreshMentoraView() {
         if (!appState.weekObs) appState.weekObs = {};
         if (!appState.rotation) appState.rotation = {};
         if (!appState.mentoriaNota) appState.mentoriaNota = {};
-        if (!appState.startDate) appState.startDate = '2026-03-16';
+        if (!appState.startDate) appState.startDate = '2026-04-27';
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
       }
     }
