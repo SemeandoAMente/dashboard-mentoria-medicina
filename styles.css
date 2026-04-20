@@ -2049,3 +2049,45 @@ body {
 .day-act-counter strong {
   color: var(--text-secondary);
 }
+
+/* ---------- Auth Split Layout ---------- */
+#auth-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0b0d14 url('medical_bg.png') no-repeat right center;
+  background-size: cover;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 12%;
+}
+
+.auth-box {
+  background: rgba(23, 27, 45, 0.75);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  padding: 40px;
+  border-radius: 18px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255, 0.12);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 768px) {
+  #auth-overlay {
+    justify-content: center;
+    padding-left: 0;
+    background-position: center;
+  }
+  .auth-box {
+    margin-top: 0;
+    max-width: 330px;
+    padding: 30px;
+  }
+}
