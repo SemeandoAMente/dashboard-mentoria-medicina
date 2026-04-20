@@ -356,57 +356,18 @@ async function syncFromFirebase() {
     const localUpdated = appState.lastUpdated || 0;
     const cloudUpdated = cloudData.lastUpdated || 0;
 
-    let didMigrate = false;
+    // Se a nuvem tiver dados mais recentes ou equivalentes, adotar a nuvem.
+    // Ignoramos o `PUT` de fallback para evitar que um celular desatualizado esmague 
+    // os checks recém-feitos por outro dispositivo na nuvem.
+    appState = cloudData;
+    if (!appState.checks) appState.checks = {};
+    if (!appState.weekObs) appState.weekObs = {};
+    if (!appState.rotation) appState.rotation = {};
+    if (!appState.mentoriaNota) appState.mentoriaNota = {};
+    if (!appState.alunaNota) appState.alunaNota = {};
+    if (!appState.startDate) appState.startDate = '2026-03-16';
 
-    if (!cloudData.lastUpdated && !appState.lastUpdated) {
-      didMigrate = migrateLegacyData(cloudData);
-      if (cloudData.checks) {
-        Object.keys(cloudData.checks).forEach(key => {
-          appState.checks[key] = cloudData.checks[key] || appState.checks[key];
-        });
-      }
-      const { checks: _c, dayActivity: _da, exec: _ex, ...rest } = cloudData;
-      Object.assign(appState, rest);
-      
-      appState.lastUpdated = Date.now();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-      fetch(FIREBASE_URL, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(appState),
-        keepalive: true
-      }).catch(() => {});
-    } 
-    else if (cloudUpdated > localUpdated) {
-      appState = cloudData;
-      if (!appState.checks) appState.checks = {};
-      if (!appState.weekObs) appState.weekObs = {};
-      if (!appState.rotation) appState.rotation = {};
-      if (!appState.mentoriaNota) appState.mentoriaNota = {};
-      if (!appState.startDate) appState.startDate = '2026-03-16';
-
-      didMigrate = migrateLegacyData(appState);
-      delete appState.dayActivity;
-      delete appState.exec;
-      
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
-      if (didMigrate) {
-        fetch(FIREBASE_URL, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(appState),
-          keepalive: true
-        }).catch(() => {});
-      }
-    }
-    else if (localUpdated > cloudUpdated) {
-      fetch(FIREBASE_URL, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(appState),
-        keepalive: true
-      }).catch(() => {});
-    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
 
     showCloudSyncBadge();
 
