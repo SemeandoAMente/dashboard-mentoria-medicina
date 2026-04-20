@@ -686,7 +686,7 @@ function renderOverview() {
       <div class="es-label">Semana atual</div>
     </div>
     <div class="exec-summary-item">
-      <div class="es-value">13</div>
+      <div class="es-value">${WEEKS_DATA.length}</div>
       <div class="es-label">Total semanas</div>
     </div>
     <div class="exec-summary-item">
@@ -1255,7 +1255,7 @@ function renderEstrategiaView() {
       <div style="margin-bottom:12px;color:var(--warning);"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
       <h3 style="font-size:1rem;font-weight:800;color:var(--text-heading);margin-bottom:8px;">Cronograma baseado em dados reais</h3>
       <p style="font-size:0.83rem;color:var(--text-secondary);line-height:1.6;">
-        O cronograma de 13 semanas foi construído a partir da análise de <strong>980 questões reais da UNIT</strong> aplicadas em vestibulares anteriores. Cada semana respeita a <strong>Técnica Espelho</strong> (Seg↔Qui, Ter↔Sex, Qua↔Sáb), o tempo humano de construção de conhecimento e a <strong>Hierarquia 80/20</strong>: Bio, Quím e Fís recebem mais semanas e mais revisão porque são as matérias que mais aparecem na prova — e as que têm discursiva. Os tópicos de maior incidência entram primeiro no cronograma; os de baixa incidência são abordados de forma mais leve ou apenas nas semanas de revisão.
+        O cronograma de <strong>5 semanas</strong> (PSUM 2026.2) foi construído a partir da análise de <strong>980 questões reais da UNIT</strong> aplicadas em vestibulares anteriores. Cada semana respeita a <strong>Técnica Espelho</strong> (Seg↔Qui, Ter↔Sex, Qua↔Sáb), o tempo humano de construção de conhecimento e a <strong>Hierarquia 80/20</strong>: Bio, Quím e Fís recebem mais semanas e mais revisão porque são as matérias que mais aparecem na prova — e as que têm discursiva. Os tópicos de maior incidência entram primeiro no cronograma; os de baixa incidência são abordados de forma mais leve ou apenas nas semanas de revisão. <strong>Prova: 31/05/2026 · Início: 27/04/2026.</strong>
       </p>
     </div>
 
