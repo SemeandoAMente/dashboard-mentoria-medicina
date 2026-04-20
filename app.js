@@ -262,6 +262,9 @@ const DAYS_OF_WEEK = [
 // ==========================================
 // STATE MANAGEMENT — Firebase + localStorage fallback
 // ==========================================
+let isReadonlyMode = false;
+let currentStudentUid = null;
+
 const STORAGE_KEY = 'mentoria_dashboard_v1';
 const FIREBASE_BASE = 'https://mentoria-medicina-default-rtdb.firebaseio.com';
 const FIREBASE_API_KEY = 'AIzaSyDXYBjSQcI0oauqHU7AbhifqqsX31cT70I';
@@ -496,6 +499,11 @@ function getRotation(weekNum) {
 }
 
 function setRotation(weekNum, subjectId) {
+  if (isReadonlyMode) {
+    showToast('Somente Leitura: Você não pode alterar a rotação de matérias deste aluno.', 'var(--priority-high)');
+    return;
+  }
+  if (!appState.rotation) appState.rotation = {};
   appState.rotation[`w${weekNum}`] = subjectId;
   saveState(appState);
   sendFirebasePatch({ [`rotation/w${weekNum}`]: subjectId });
@@ -517,6 +525,10 @@ function getAlunaNota(weekNum) {
 }
 
 function setAlunaNota(weekNum, val) {
+  if (isReadonlyMode) {
+    showToast('Somente Leitura: Somente a aluna preenche esse relato.', 'var(--priority-high)');
+    return;
+  }
   if (!appState.alunaNota) appState.alunaNota = {};
   appState.alunaNota[`w${weekNum}`] = val;
   saveState(appState);
@@ -1077,6 +1089,11 @@ function getDayActivity(week, dayKey, type) {
 }
 
 function toggleDayActivity(week, dayKey, type) {
+  if (isReadonlyMode) {
+    showToast('Somente Leitura: Você pode ver, mas não registrar nas cartelas da aluna.', 'var(--priority-high)');
+    renderWeekProgressView(); 
+    return;
+  }
   toggleExec(week, dayKey, ACTIVITY_TO_EXEC[type] || type);
   renderWeekProgressView();
   showSavedToast();
@@ -1528,26 +1545,31 @@ async function refreshMentoraView() {
 }
 
 // ==========================================
-// TOAST FEEDBACK DE SALVAMENTO
+// TOAST FEEDBACK
 // ==========================================
 function showSavedToast() {
+  showToast('✓ Progresso salvo', '#10b981');
+}
+
+function showToast(message, bgColor) {
   let toast = document.getElementById('saved-toast');
   if (!toast) {
     toast = document.createElement('div');
     toast.id = 'saved-toast';
     toast.style.cssText = [
       'position:fixed', 'bottom:24px', 'right:24px', 'z-index:9999',
-      'background:#10b981', 'color:#fff', 'font-size:13px', 'font-weight:500',
-      'padding:8px 16px', 'border-radius:8px', 'box-shadow:0 4px 16px rgba(0,0,0,0.18)',
+      'color:#fff', 'font-size:13px', 'font-weight:600',
+      'padding:10px 18px', 'border-radius:8px', 'box-shadow:0 4px 16px rgba(0,0,0,0.18)',
       'display:flex', 'align-items:center', 'gap:6px',
       'opacity:0', 'transition:opacity 0.2s', 'pointer-events:none'
     ].join(';');
-    toast.textContent = '✓ Progresso salvo';
     document.body.appendChild(toast);
   }
+  toast.style.background = bgColor || '#10b981';
+  toast.textContent = message;
   toast.style.opacity = '1';
   clearTimeout(toast._timeout);
-  toast._timeout = setTimeout(() => { toast.style.opacity = '0'; }, 1500);
+  toast._timeout = setTimeout(() => { toast.style.opacity = '0'; }, 2000);
 }
 
 // ==========================================
@@ -1596,6 +1618,16 @@ async function checkAuth() {
       localStorage.setItem('firebase_id_token', data.idToken);
       localStorage.setItem('firebase_uid', data.localId);
       localStorage.setItem('auth_role', expectedRole);
+
+      // Save Student Profile info on login
+      if (expectedRole === 'aluna') {
+        const studentName = "Aluna - " + fbUser.split('@')[0];
+        fetch(`${FIREBASE_BASE}/users/${data.localId}/state.json?auth=${data.idToken}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: fbUser, name: studentName, lastUpdated: Date.now() })
+        }).catch(() => {});
+      }
       
       applyRole(expectedRole);
     } catch (err) {
@@ -1604,29 +1636,87 @@ async function checkAuth() {
   }
 }
 
-function applyRole(role) {
+async function loadStudentList() {
+  const token = localStorage.getItem('firebase_id_token');
+  if (!token) return;
+
+  try {
+    const res = await fetch(`${FIREBASE_BASE}/users.json?auth=${token}`);
+    if (!res.ok) throw new Error('Não acessou /users');
+    const usersData = await res.json();
+    if (!usersData) return;
+
+    const selector = document.getElementById('student-selector');
+    selector.innerHTML = '';
+
+    Object.keys(usersData).forEach(uid => {
+      const stateObj = usersData[uid].state || {};
+      const label = stateObj.name || stateObj.email || \`UID: \${uid.substring(0,5)}\`;
+      const opt = document.createElement('option');
+      opt.value = uid;
+      opt.textContent = label;
+      selector.appendChild(opt);
+    });
+
+    if (selector.options.length > 0) {
+      loadSelectedStudent();
+    }
+  } catch (err) {
+    console.error('Falha carregando alunos:', err);
+    document.getElementById('student-selector').innerHTML = '<option>Erro de Leitura</option>';
+  }
+}
+
+function loadSelectedStudent() {
+  const uid = document.getElementById('student-selector').value;
+  if (!uid) return;
+  currentStudentUid = uid;
+  isReadonlyMode = true; // Sempre trava edições comuns na tela do mentor
+  
+  // Limpa tela anterior e recarrega alvo
+  appState = {};
+  syncFromFirebase().then(() => {
+    // Força refazer todos blocos gráficos com os dados do alvo
+    if (typeof renderOverview === 'function') renderOverview();
+    if (typeof renderSubjectsView === 'function') renderSubjectsView();
+    if (typeof renderWeekProgressView === 'function') renderWeekProgressView();
+    if (typeof renderMentoraView === 'function') renderMentoraView();
+  });
+}
+
+async function applyRole(role) {
   const overlay = document.getElementById('auth-overlay');
   if (overlay) overlay.style.display = 'none';
 
-  if (role === 'aluna') {
+  if (role === 'mentor') {
+    document.getElementById('mentor-student-selector-container').style.display = 'block';
+    await loadStudentList(); 
+  } else {
+    // Role Aluna Padrão
+    isReadonlyMode = false;
+    currentStudentUid = localStorage.getItem('firebase_uid');
+    
     const navMentor = document.getElementById('nav-mentor');
     const navLabelMentor = document.getElementById('nav-label-mentor');
     if (navMentor) navMentor.style.display = 'none';
     if (navLabelMentor) navLabelMentor.style.display = 'none';
+    
+    syncFromFirebase();
   }
-  
-  // Sync com o Firebase somente após logar com sucesso
-  syncFromFirebase();
 }
 
 function logout() {
   localStorage.removeItem('auth_role');
   localStorage.removeItem('firebase_id_token');
   localStorage.removeItem('firebase_uid');
+  currentStudentUid = null;
   document.getElementById('auth-user').value = '';
   document.getElementById('auth-pass').value = '';
   const overlay = document.getElementById('auth-overlay');
   if (overlay) overlay.style.display = 'flex';
+  
+  // Reseta Seletor
+  document.getElementById('mentor-student-selector-container').style.display = 'none';
 }
 
 // ==========================================

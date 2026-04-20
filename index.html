@@ -53,6 +53,15 @@
           </div>
         </div>
       </div>
+      
+      <!-- Mentor Student Selector -->
+      <div id="mentor-student-selector-container" style="display:none; padding: 0 16px 16px 16px; margin-top: -8px;">
+        <label style="font-size: 0.72rem; color: var(--text-secondary); font-weight: 700; margin-bottom: 6px; display: block; text-transform: uppercase;">Acompanhamento de Aluno</label>
+        <select id="student-selector" onchange="loadSelectedStudent()" style="width:100%; padding: 10px; border-radius: 8px; background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); font-weight: 600; font-size: 0.85rem; outline: none; cursor: pointer;">
+          <option value="">Carregando pacientes...</option>
+        </select>
+      </div>
+
       <nav class="sidebar-nav">
         <div class="nav-section-label">Painel</div>
 
