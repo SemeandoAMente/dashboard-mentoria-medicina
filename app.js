@@ -1651,7 +1651,7 @@ async function loadStudentList() {
 
     Object.keys(usersData).forEach(uid => {
       const stateObj = usersData[uid].state || {};
-      const label = stateObj.name || stateObj.email || \`UID: \${uid.substring(0,5)}\`;
+      const label = stateObj.name || stateObj.email || `UID: ${uid.substring(0,5)}`;
       const opt = document.createElement('option');
       opt.value = uid;
       opt.textContent = label;
