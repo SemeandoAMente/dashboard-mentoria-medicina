@@ -1588,6 +1588,14 @@ function applyRole(role) {
   syncFromFirebase();
 }
 
+function logout() {
+  localStorage.removeItem('auth_role');
+  document.getElementById('auth-user').value = '';
+  document.getElementById('auth-pass').value = '';
+  const overlay = document.getElementById('auth-overlay');
+  if (overlay) overlay.style.display = 'flex';
+}
+
 // ==========================================
 // INITIALIZATION
 // ==========================================
