@@ -287,7 +287,11 @@ function sendFirebasePatch(updates) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(updates),
     keepalive: true
-  }).catch(() => { /* ignore */ });
+  })
+  .then(res => {
+    if(!res.ok) console.error('Erro Firebase:', res.statusText);
+  })
+  .catch(err => console.error('Falha de Rede Firebase:', err));
 }
 
 // Migrates legacy dayActivity (w1_seg_c) and exec (exec_w1_seg_construcao) fields
