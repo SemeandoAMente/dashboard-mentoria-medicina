@@ -1628,40 +1628,20 @@ async function loadStudentList() {
   const selector = document.getElementById('student-selector');
   if (!selector) return;
 
-  // Injeção de Segurança: Dados recuperados diretamente do Authentication
-  // Isso contorna a trava .read do Firebase Realtime Database
+  // Apenas a aluna Camilla
   const hardcodedStudents = {
     "uacav7vT5vfFJiM6g91orz6spAf2": "Aluna - Camilla Barreto"
   };
 
-  try {
-    const res = await fetch(`${FIREBASE_BASE}/users.json?auth=${token}`);
-    if (!res.ok) throw new Error('Não acessou /users a partir da raiz.');
-    const usersData = await res.json();
-    if (!usersData || usersData.error) throw new Error('Bloqueado pelas Regras');
+  selector.innerHTML = '';
+  Object.keys(hardcodedStudents).forEach(uid => {
+    const opt = document.createElement('option');
+    opt.value = uid;
+    opt.textContent = hardcodedStudents[uid];
+    selector.appendChild(opt);
+  });
 
-    selector.innerHTML = '';
-    Object.keys(usersData).forEach(uid => {
-      const stateObj = usersData[uid].state || {};
-      const label = stateObj.name || stateObj.email || `UID: ${uid.substring(0,5)}`;
-      const opt = document.createElement('option');
-      opt.value = uid;
-      opt.textContent = label;
-      selector.appendChild(opt);
-    });
-  } catch (err) {
-    console.warn('Fallback ativado: Regras do Firebase bloquearam leitura raiz. Carregando lista hardcoded.');
-    selector.innerHTML = '';
-    // Modo Fallback para quando o Mentor não tem permissões no console
-    Object.keys(hardcodedStudents).forEach(uid => {
-      const opt = document.createElement('option');
-      opt.value = uid;
-      opt.textContent = hardcodedStudents[uid];
-      selector.appendChild(opt);
-    });
-  }
-
-  // Auto-selecionar e carregar o primeiro alvo
+  // Auto-selecionar e carregar
   if (selector.options.length > 0) {
     loadSelectedStudent();
   }
