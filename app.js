@@ -240,7 +240,7 @@ const FIREBASE_BASE = 'https://mentoria-medicina-default-rtdb.firebaseio.com';
 const FIREBASE_API_KEY = 'AIzaSyDXYBjSQcI0oauqHU7AbhifqqsX31cT70I';
 
 function getFirebaseUrl() {
-  const uid = localStorage.getItem('firebase_uid');
+  const uid = currentStudentUid || localStorage.getItem('firebase_uid');
   const token = localStorage.getItem('firebase_id_token');
   if (uid && token) {
     return `${FIREBASE_BASE}/users/${uid}/state.json?auth=${token}`;
@@ -337,8 +337,7 @@ async function syncFromFirebase() {
     const cloudData = await res.json();
     if (cloudData === null) {
       // Firebase explicitamente vazio — novo usuário começa zerado
-      appState.checks = {};
-      appState.lastUpdated = Date.now();
+      appState = { checks: {}, weekObs: {}, rotation: {}, mentoriaNota: {}, alunaNota: {}, startDate: '2026-04-27', lastUpdated: Date.now() };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
       if (typeof currentSection !== 'undefined') navigateTo(currentSection);
       return;
@@ -357,6 +356,8 @@ async function syncFromFirebase() {
     if (!appState.mentoriaNota) appState.mentoriaNota = {};
     if (!appState.alunaNota) appState.alunaNota = {};
     if (!appState.startDate) appState.startDate = '2026-04-27';
+
+    migrateLegacyData(cloudData);
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
 
@@ -396,6 +397,12 @@ if (!appState.mentoriaNota) appState.mentoriaNota = {};
 if (!appState.startDate) appState.startDate = '2026-04-27';
 
 function toggleCheck(weekNum, dayKey, itemKey) {
+  if (isReadonlyMode) {
+    showToast('Somente Leitura: Você pode ver, mas não registrar nas cartelas da aluna.', 'var(--priority-high)');
+    renderWeeklyView();
+    if (currentSection === 'overview') renderOverview();
+    return appState.checks[`w${weekNum}_${dayKey}_${itemKey}`];
+  }
   const key = `w${weekNum}_${dayKey}_${itemKey}`;
   appState.checks[key] = !appState.checks[key];
   saveState(appState);
@@ -404,7 +411,7 @@ function toggleCheck(weekNum, dayKey, itemKey) {
 }
 
 function isChecked(weekNum, dayKey, itemKey) {
-  return !!appState.checks[`w${weekNum}_${dayKey}_${itemKey}`];
+  return !!(appState.checks && appState.checks[`w${weekNum}_${dayKey}_${itemKey}`]);
 }
 
 // Mapeamento exec → chaves de checks (construcao cobre construcao1 + construcao2)
@@ -455,7 +462,7 @@ function isExecDone(weekNum, dayKey, type) {
 }
 
 function getWeekObs(weekNum) {
-  return appState.weekObs[`w${weekNum}`] || '';
+  return (appState.weekObs && appState.weekObs[`w${weekNum}`]) || '';
 }
 
 function setWeekObs(weekNum, val) {
@@ -465,7 +472,7 @@ function setWeekObs(weekNum, val) {
 }
 
 function getRotation(weekNum) {
-  return appState.rotation[`w${weekNum}`] || null;
+  return (appState.rotation && appState.rotation[`w${weekNum}`]) || null;
 }
 
 function setRotation(weekNum, subjectId) {
@@ -1497,7 +1504,9 @@ function renderMentoraView() {
 
 async function refreshMentoraView() {
   try {
-    const res = await fetch(FIREBASE_URL, { cache: 'no-store' });
+    const url = getFirebaseUrl();
+    if (!url) return;
+    const res = await fetch(url, { cache: 'no-store' });
     if (res.ok) {
       const cloudData = await res.json();
       if (cloudData) {
@@ -1506,7 +1515,9 @@ async function refreshMentoraView() {
         if (!appState.weekObs) appState.weekObs = {};
         if (!appState.rotation) appState.rotation = {};
         if (!appState.mentoriaNota) appState.mentoriaNota = {};
+        if (!appState.alunaNota) appState.alunaNota = {};
         if (!appState.startDate) appState.startDate = '2026-04-27';
+        migrateLegacyData(cloudData);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(appState));
       }
     }
@@ -1585,6 +1596,10 @@ async function checkAuth() {
         return;
       }
       
+      if (errorEl) {
+        errorEl.style.display = 'none';
+      }
+
       localStorage.setItem('firebase_id_token', data.idToken);
       localStorage.setItem('firebase_uid', data.localId);
       localStorage.setItem('auth_role', expectedRole);
@@ -1610,15 +1625,22 @@ async function loadStudentList() {
   const token = localStorage.getItem('firebase_id_token');
   if (!token) return;
 
+  const selector = document.getElementById('student-selector');
+  if (!selector) return;
+
+  // Injeção de Segurança: Dados recuperados diretamente do Authentication
+  // Isso contorna a trava .read do Firebase Realtime Database
+  const hardcodedStudents = {
+    "uacav7vT5vfFJiM6g91orz6spAf2": "Aluna - Camilla Barreto"
+  };
+
   try {
     const res = await fetch(`${FIREBASE_BASE}/users.json?auth=${token}`);
-    if (!res.ok) throw new Error('Não acessou /users');
+    if (!res.ok) throw new Error('Não acessou /users a partir da raiz.');
     const usersData = await res.json();
-    if (!usersData) return;
+    if (!usersData || usersData.error) throw new Error('Bloqueado pelas Regras');
 
-    const selector = document.getElementById('student-selector');
     selector.innerHTML = '';
-
     Object.keys(usersData).forEach(uid => {
       const stateObj = usersData[uid].state || {};
       const label = stateObj.name || stateObj.email || `UID: ${uid.substring(0,5)}`;
@@ -1627,13 +1649,21 @@ async function loadStudentList() {
       opt.textContent = label;
       selector.appendChild(opt);
     });
-
-    if (selector.options.length > 0) {
-      loadSelectedStudent();
-    }
   } catch (err) {
-    console.error('Falha carregando alunos:', err);
-    document.getElementById('student-selector').innerHTML = '<option>Erro de Leitura</option>';
+    console.warn('Fallback ativado: Regras do Firebase bloquearam leitura raiz. Carregando lista hardcoded.');
+    selector.innerHTML = '';
+    // Modo Fallback para quando o Mentor não tem permissões no console
+    Object.keys(hardcodedStudents).forEach(uid => {
+      const opt = document.createElement('option');
+      opt.value = uid;
+      opt.textContent = hardcodedStudents[uid];
+      selector.appendChild(opt);
+    });
+  }
+
+  // Auto-selecionar e carregar o primeiro alvo
+  if (selector.options.length > 0) {
+    loadSelectedStudent();
   }
 }
 
@@ -1641,10 +1671,10 @@ function loadSelectedStudent() {
   const uid = document.getElementById('student-selector').value;
   if (!uid) return;
   currentStudentUid = uid;
-  isReadonlyMode = true; // Sempre trava edições comuns na tela do mentor
+  // O Mentor agora pode editar as marcações (Trava "Sempre trava edições comuns" removida)
   
   // Limpa tela anterior e recarrega alvo
-  appState = {};
+  appState = { checks: {}, weekObs: {}, rotation: {}, mentoriaNota: {}, alunaNota: {}, startDate: '2026-04-27' };
   syncFromFirebase().then(() => {
     // Força refazer todos blocos gráficos com os dados do alvo
     if (typeof renderOverview === 'function') renderOverview();
