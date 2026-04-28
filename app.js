@@ -1690,6 +1690,8 @@ async function applyRole(role) {
 
   if (role === 'mentor') {
     document.getElementById('mentor-student-selector-container').style.display = 'block';
+    document.getElementById('nav-agents-container').style.display = 'none';
+    document.getElementById('nav-agents-label').style.display = 'none';
     await loadStudentList(); 
   } else {
     // Role Aluna Padrão
@@ -1700,6 +1702,10 @@ async function applyRole(role) {
     const navLabelMentor = document.getElementById('nav-label-mentor');
     if (navMentor) navMentor.style.display = 'none';
     if (navLabelMentor) navLabelMentor.style.display = 'none';
+    
+    document.getElementById('mentor-student-selector-container').style.display = 'none';
+    document.getElementById('nav-agents-container').style.display = 'block';
+    document.getElementById('nav-agents-label').style.display = 'block';
     
     syncFromFirebase();
   }
@@ -1717,6 +1723,8 @@ function logout() {
   
   // Reseta Seletor
   document.getElementById('mentor-student-selector-container').style.display = 'none';
+  document.getElementById('nav-agents-container').style.display = 'block';
+  document.getElementById('nav-agents-label').style.display = 'block';
 }
 
 // ==========================================
